@@ -1,0 +1,2703 @@
+{
+  "name": "Fathom Agent Phase 1 Monday.com",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "zap",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -576,
+        256
+      ],
+      "id": "aaeb3643-5ec5-45c8-adb5-1bb43beea355",
+      "name": "Webhook",
+      "webhookId": "1e0c1d9f-51ed-4f68-be63-5d65c9fec73e"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9745d651-4fb6-493f-9eed-1cd83a99a54f",
+              "name": "body['fathom transcript']",
+              "value": "={{ $json.body['fathom transcript'] }}",
+              "type": "string"
+            },
+            {
+              "id": "2bc966df-d6f5-417b-a4f4-acb01e1bde80",
+              "name": "body.Meeting_Title",
+              "value": "={{ $json.body.Meeting_Title }}",
+              "type": "string"
+            },
+            {
+              "id": "f3948388-25e6-4b7b-9c29-61595f5ea157",
+              "name": "body.Meeting_Scheduled_start_time",
+              "value": "={{ $json.body.Meeting_Scheduled_start_time }}",
+              "type": "string"
+            },
+            {
+              "id": "aefc9ae2-094c-4f57-ac99-e391c2abe57f",
+              "name": "body.Recording_URL",
+              "value": "={{ $json.body.Recording_URL }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -416,
+        256
+      ],
+      "id": "1e4d0664-ca20-4289-b8c1-ba3c0df1689c",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "Creatives",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "432665c2-5f57-414f-a2b6-168e56d839d1"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Creative_Table"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a1ca8119-74a3-4778-a75e-1d87f8e36b3b",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "Engineering",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Engineering_Table"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "49be8174-f850-4584-be20-32006010da9a",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "Product",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Product_Table"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c9b287fa-9704-4551-ba04-0d1df810633d",
+                    "leftValue": "={{ $json.text }}",
+                    "rightValue": "Other",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Other_Table"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        896,
+        224
+      ],
+      "id": "afb00bcb-e3d4-4952-9ad0-1706bfc71d0a",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {
+          "temperature": 0.1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        304,
+        544
+      ],
+      "id": "921b7a4f-8cd4-423a-af63-92ab56a8d7ea",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "npKSRVeGjp36H8Xf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=fathom transcript: {{ $('Edit Fields').item.json.body['fathom transcript'] }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=The user Input is a transcript of a call  I need you to take it, and chronologically list out all key things that happened, ignore pleasentries and other non-important information. All matters/projects discussed, updates, new information, things requested to do, action points, decisions made, things requested etc.  This will then be appended to a running list of the last 20 calls, to create a coherent running timeline fo everything that's happened.  You must compress the transcript into 2000 words or less, so you have significant room to include details. DO NOT miss anything important or even semi-important, you have 2000 words so use them, i want this to be a 99% lossless compression of the original transcription's key information.  Provide a simple, <2000 word summary of what happened in the call."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        304,
+        256
+      ],
+      "id": "c93fdf0c-607a-4e11-8d27-462dc8d9b87d",
+      "name": "2k Summary"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Your job is to categorize the above call summary into one of the following 4 categories.\nReturn ONLY the Name, with nothing else. You can only choose 1.\n\nThe category should be pretty obvious from the call transcript.\nEngineering: Anything related to engineering/software dev\nProduct: Anything related to product dev, book creation, especially with Marj/Hannah/Pauline\nCreatives: Anything related to creative strategy, video editing, media buying, UGC, Shanon coordination, Whitelisting, etc.\nOther: Anything related to HR, recruiting, admin tasks, growth team calls with my partners etc.\n\nCategories you can choose from. Output only one word, which is one of the following 4:\nEngineering\nProduct\nCreatives\nOther\n\n\n--\nCall summary to review: {{ $('Edit Fields').item.json.body.Meeting_Title }}\n\n{{ $json.text }}\n",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        640,
+        256
+      ],
+      "id": "78553228-0359-4adb-b9c3-860df2de535b",
+      "name": "Call Categorization"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblvoDmQdHuJrOlmc",
+          "mode": "list",
+          "cachedResultName": "Creatives",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblvoDmQdHuJrOlmc"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Call Name": "={{ $('Edit Fields').item.json.body.Meeting_Title }}",
+            "Call Link": "={{ $('Edit Fields').item.json.body.Recording_URL }}",
+            "Full Summary": "={{ $('2k Summary').item.json.text }}",
+            "Slack Summary": "={{ $('Slack Summary').item.json.text }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Call Name",
+              "displayName": "Call Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Call Link",
+              "displayName": "Call Link",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Full Summary",
+              "displayName": "Full Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Slack Summary",
+              "displayName": "Slack Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1248,
+        32
+      ],
+      "id": "8091c37d-0d56-48f1-9376-71b99c0a9c42",
+      "name": "Creatives",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblF7yv3ukfVknWGB",
+          "mode": "list",
+          "cachedResultName": "Engineering",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblF7yv3ukfVknWGB"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Call Name": "={{ $('Edit Fields').item.json.body.Meeting_Title }}",
+            "Call Link": "={{ $('Edit Fields').item.json.body.Recording_URL }}",
+            "Full Summary": "={{ $('2k Summary').item.json.text }}",
+            "Slack Summary": "={{ $('Slack Summary').item.json.text }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Call Name",
+              "displayName": "Call Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Call Link",
+              "displayName": "Call Link",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Full Summary",
+              "displayName": "Full Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Slack Summary",
+              "displayName": "Slack Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1248,
+        208
+      ],
+      "id": "d6c468f8-ae64-42b3-a5f3-1db19498f60f",
+      "name": "Engineering",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblmXeVzVxetc7GOg",
+          "mode": "list",
+          "cachedResultName": "Product",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblmXeVzVxetc7GOg"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Call Name": "={{ $('Edit Fields').item.json.body.Meeting_Title }}",
+            "Call Link": "={{ $('Edit Fields').item.json.body.Recording_URL }}",
+            "Full Summary": "={{ $('2k Summary').item.json.text }}",
+            "Slack Summary": "={{ $('Slack Summary').item.json.text }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Call Name",
+              "displayName": "Call Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Call Link",
+              "displayName": "Call Link",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Full Summary",
+              "displayName": "Full Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Slack Summary",
+              "displayName": "Slack Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1248,
+        400
+      ],
+      "id": "40069d63-51b9-4446-90ab-98d5f622b3a4",
+      "name": "Product",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblyt4vGU3TZiid3a",
+          "mode": "list",
+          "cachedResultName": "Other",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblyt4vGU3TZiid3a"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Call Name": "={{ $('Edit Fields').item.json.body.Meeting_Title }}",
+            "Call Link": "={{ $('Edit Fields').item.json.body.Recording_URL }}",
+            "Full Summary": "={{ $('2k Summary').item.json.text }}",
+            "Slack Summary": "={{ $('Slack Summary').item.json.text }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Call Name",
+              "displayName": "Call Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Call Link",
+              "displayName": "Call Link",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Full Summary",
+              "displayName": "Full Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Slack Summary",
+              "displayName": "Slack Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1248,
+        576
+      ],
+      "id": "4ed28828-1593-40df-9857-a3802731593d",
+      "name": "Other",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {
+          "temperature": 0.1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1488,
+        544
+      ],
+      "id": "d2c778bd-15c5-4c25-87b5-42e006ffe2cd",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "npKSRVeGjp36H8Xf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "708875b8-f34a-4417-8dba-a00086b5ddd1",
+              "name": "fields['Slack Summary']",
+              "value": "={{ $json.fields['Slack Summary'] }}",
+              "type": "string"
+            },
+            {
+              "id": "f09a54b3-945b-4cd0-9ce8-5f0c8777f79e",
+              "name": "fields['Call Name']",
+              "value": "={{ $json.fields['Call Name'] }}",
+              "type": "string"
+            },
+            {
+              "id": "bb1f92f6-fd5a-4fd9-a701-5e98ffa847b9",
+              "name": "fields['Call Link']",
+              "value": "={{ $json.fields['Call Link'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1472,
+        32
+      ],
+      "id": "a81e4103-422f-4f22-ad4a-fbf3755160cd",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "content": "## WebHook\n\n### This will get the actual transcription from zapier.",
+        "height": 336,
+        "width": 352,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -592,
+        96
+      ],
+      "id": "80c1e653-eeca-42bb-8e7b-f2aa78e65f5c",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Summary for Table\n\n### Generate 2K summary for table to store\n",
+        "height": 336,
+        "width": 352
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        96
+      ],
+      "id": "fe2cac4d-4120-40f9-b7be-18e2711259da",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Categorization will be done here",
+        "height": 336,
+        "width": 544
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        608,
+        96
+      ],
+      "id": "6b385495-2ca3-4fb8-88aa-9c539ef67500",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Google Gemini Pro 2.5",
+        "height": 272,
+        "width": 352
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        176,
+        448
+      ],
+      "id": "ca1dbc28-84a4-4d90-b5bc-b5aaec2d4ee2",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Store data ",
+        "height": 784,
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1200,
+        -64
+      ],
+      "id": "f0a58a22-6305-4977-9f64-3345b9e55258",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## Google Gemini Pro 2.5",
+        "height": 272
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        448
+      ],
+      "id": "d3f26d5e-9e7e-40b4-a568-70f440c8a7e5",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## Select the category\n",
+        "height": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1424,
+        -64
+      ],
+      "id": "b09df065-a04b-4e63-829c-15ce29608361",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U01V34DRB1A",
+          "mode": "list",
+          "cachedResultName": "kamal.khraisheh"
+        },
+        "text": "={{ $json.text }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        80,
+        256
+      ],
+      "id": "48321e58-c228-4425-b4e5-98f7192080ed",
+      "name": "Send a message",
+      "webhookId": "e88a8141-4a20-46ab-bc5b-d71d2d7e6c1a",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "lVpLDXvzVVU1zBnW",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=fathom transcript: {{ $json.body['fathom transcript'] }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Your job is to provide a DM update to Kamal for the following meeting transcript. Return the following things. Keep it simple but do not miss anything as Kamal is getting 5-10 of these a day and wants to be able to skim, while making sure not to miss anything important:\n\n1. Start by providing the name of the call, Date, and link in the following format [Mon, Aug 21] [Engineering call] [Fathom Link]\n\nHere is the raw data for that:\n{{ $json.body.Meeting_Title }}\n{{ $json.body.Meeting_Scheduled_start_time }}\n{{ $json.body.Recording_URL }}. \n(If it is an impromptu meeting, infer the meeting context}\n\n2. Provide a simple, 1 paragraph summary of what happened in the call.\n\n3. Provide a numbered list of the things requested of Kamal that he agreed to do/follow up on that have not already been done in the call (Things either Kamal said he would do, or things other people int he call requested of Kamal that he said he'd do/check on)\n\n4. Provide a numbered list, in the following format [NAME of Requestee]: [Request], of the things Kamal asked others to do, check on, or follow up on, that have not already been concluded.\n\nTranscript: {{ $json.body['fathom transcript'] }}"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -192,
+        256
+      ],
+      "id": "87ce9aad-f8c3-44df-a5bf-65a8e3142c02",
+      "name": "Slack Summary"
+    },
+    {
+      "parameters": {
+        "content": "## Slack Summary\n\n### Here slack short summary will be generated and send to slack as a message.",
+        "height": 336,
+        "width": 448,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        96
+      ],
+      "id": "10a317d9-1266-49ee-adf9-1c881cbd0606",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Meeting Agent — Auto To-Do Updater\n\n* Ingest Fathom transcripts via webhook\n* Gemini 2.5 Pro (Zapier prompts): Slack summary + 2k table summary + categorization\n* Two Airtable lists: Me / Others\n* On each new call: UPSERT tasks (add, update, mark done) by scanning full transcript — never overwrite lists\n",
+        "height": 816,
+        "width": 3616,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -608,
+        -80
+      ],
+      "id": "bec39772-b43e-432a-8caa-d17ad288bd22",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "3GvUxWl2GthVFt5W",
+          "mode": "list",
+          "cachedResultName": "Fathom Agent Phase 3"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Full call Transcript": "={{ $('Edit Fields').item.json.body['fathom transcript'] }}",
+            "Recording URL": "={{ $('Edit Fields').item.json.body.Recording_URL }}",
+            "Meeting Title": "={{ $('Edit Fields').item.json.body.Meeting_Title }}",
+            "Table Name": "={{ $('Switch').item.json.text }}"
+          },
+          "matchingColumns": [
+            "Execution Log"
+          ],
+          "schema": [
+            {
+              "id": "Full call Transcript",
+              "displayName": "Full call Transcript",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Recording URL",
+              "displayName": "Recording URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Meeting Title",
+              "displayName": "Meeting Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Table Name",
+              "displayName": "Table Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        2816,
+        32
+      ],
+      "id": "d549e8d9-9abb-4572-b370-eb8327b6230a",
+      "name": "Execute Workflow"
+    },
+    {
+      "parameters": {
+        "content": "## Log message\n### send to slack",
+        "height": 288,
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2560,
+        -64
+      ],
+      "id": "dc9702fa-7142-4b73-a3ff-82ed8f106562",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U01V34DRB1A",
+          "mode": "list",
+          "cachedResultName": "kamal.khraisheh"
+        },
+        "text": "={{ $json.output }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2608,
+        32
+      ],
+      "id": "015d5468-b6ff-43c2-9adb-6e1a216c85f1",
+      "name": "Send log message",
+      "webhookId": "d94af762-1c84-46b0-89ab-83bef0488b9c",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "lVpLDXvzVVU1zBnW",
+          "name": "Slack account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Research Flow\n### Execute the Sub-Research WorkFlow",
+        "height": 288,
+        "width": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2768,
+        -64
+      ],
+      "id": "2389b489-cab1-4ec8-ad9e-755411f092ab",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=User query:\n{{ $json.chatInput }}",
+        "options": {
+          "systemMessage": "=The user input will be \"task description\", \"update text\", \"status\", \"Person Name\" etc to add.\n\nyour tasks are the following:\n1. first load all the items by using this tool \"Get many items in Monday.com\", this will contain many fields and its id use the specific id to add update.\n\n2. if the task is not exists already (using sementic search) in the list then use tool \"Create an item in a board's group in Monday.com\" to create new items.\n\n3. else Use this \"Update Status (Me)1\" tool to add an update to monday.com group item.\n\n4. use this \"Change a column value for a board item in Monday.com\" tool to add or update status. use the status from the list accordingly.\n - Working on it\n - Done\n - Stuck\n\n5. use this \"Monday.com column change Person\" tool to assign person to the task. before assigning Person to task you will need its id so use this \"Search records in Airtable\" tool to first search for his id and then use that id to add Person.\n\n6. use this \"Monday.com column change Date\" tool to assign the given date: {{ $now.plus(5, 'days').format('yyyy-MM-dd') }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -352,
+        848
+      ],
+      "id": "b4c14b2e-864b-4e86-9634-eb18672dfce4",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "operation": "addUpdate",
+        "itemId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item_ID', `use item id here`, 'string') }}",
+        "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Update_Text', `The Update Text should be Plan text`, 'string') }}"
+      },
+      "type": "n8n-nodes-base.mondayComTool",
+      "typeVersion": 1,
+      "position": [
+        48,
+        1088
+      ],
+      "id": "656e8bbd-57ee-4e71-9d2e-fdeaaffb7f4a",
+      "name": "Update Status (Me)1",
+      "credentials": {
+        "mondayComApi": {
+          "id": "Gvv16mDLf05X1c1z",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -448,
+        1088
+      ],
+      "id": "61b5da99-4991-4211-80a2-d46870dbc930",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "npKSRVeGjp36H8Xf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "operation": "getAll",
+        "boardId": "2137415769",
+        "groupId": "topics"
+      },
+      "type": "n8n-nodes-base.mondayComTool",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        1088
+      ],
+      "id": "8b83620a-0e51-4c62-97c0-d68761372c32",
+      "name": "Get many items in Monday.com",
+      "credentials": {
+        "mondayComApi": {
+          "id": "Gvv16mDLf05X1c1z",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Create an item in a board's group in Monday.com, for Name use Task description.",
+        "resource": "boardItem",
+        "boardId": "2137415769",
+        "groupId": "topics",
+        "name": "={{ $fromAI(\"Name\") }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.mondayComTool",
+      "typeVersion": 1,
+      "position": [
+        -272,
+        1088
+      ],
+      "id": "34653575-3931-4804-a174-6bb541b0ff8b",
+      "name": "Create an item in a board's group in Monday.com",
+      "credentials": {
+        "mondayComApi": {
+          "id": "Gvv16mDLf05X1c1z",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "use this tool for changing moday.com item Status",
+        "workflowId": {
+          "__rl": true,
+          "value": "S9qHh7k5hz7T7iN5",
+          "mode": "list",
+          "cachedResultName": "Monday.com column change Status"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Item ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item_ID', `use item id here`, 'string') }}",
+            "Value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', `e.g. {\"label\":\"Done\"}\n`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Value",
+              "displayName": "Value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        224,
+        1088
+      ],
+      "id": "ae5a5a15-ee37-43cb-855b-1c473623237b",
+      "name": "Change a column value for a board item in Monday.com"
+    },
+    {
+      "parameters": {
+        "description": "use this tool for changing moday.com item Person",
+        "workflowId": {
+          "__rl": true,
+          "value": "5wHufOIGsv1ffVc1",
+          "mode": "list",
+          "cachedResultName": "Monday.com column change Person"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Item ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item_ID', `use item id here`, 'string') }}",
+            "Value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', `e.g. {\"personsAndTeams\":[{ \"id\": \"82576859\", \"kind\":\"person\" }]}\n\nhere change the id the actual person ID.`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "Value",
+              "displayName": "Value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        1088
+      ],
+      "id": "887f661b-ff32-451f-bba4-d455980bb392",
+      "name": "Monday.com column change Person"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbli3OfEYDWEuLboT",
+          "mode": "list",
+          "cachedResultName": "Name_IDS",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tbli3OfEYDWEuLboT"
+        },
+        "filterByFormula": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Filter_By_Formula', `filter by name e.g. {Name} = 'Jhon'`, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        736,
+        1088
+      ],
+      "id": "010a19cc-c15b-4021-99dc-bf94c575581c",
+      "name": "Search records in Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "use this tool for changing moday.com item Date",
+        "workflowId": {
+          "__rl": true,
+          "value": "VNmWwyf64LV2ce7E",
+          "mode": "list",
+          "cachedResultName": "Monday.com column change Date"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Item ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item_ID', `use item id here`, 'string') }}",
+            "Value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', `e.g. {\"date\":\"2025-09-11\"}`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "Value",
+              "displayName": "Value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        576,
+        1088
+      ],
+      "id": "70a8e1f6-9921-4c85-872a-f7063e71dae6",
+      "name": "Monday.com column change Date"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Call Name: {{ $json.fields['Call Name'] }}\nCall Link: {{ $json.fields['Call Link'] }}\nSlack To do Summary:\n{{ $json.fields['Slack Summary'] }}\n",
+        "options": {
+          "systemMessage": "=You are a To do list manager that manage that lists from Slack to do Summary that is already extracted by another AI Agent from Meeting Transcript so extract info like task [Description, Assigned_to, Status, Call Link and Call Name] you have access to tools like:\n\nTool Usage:\n1. Search or get all records in Airtable of (Me)\n2. Search or get all records in Airtable of (Others)\n3. Update record in Airtable (Me)\n4. Update record in Airtable (Others)\n5. Create an item for (Me)\n6. Create an item for (Others)\n7. Create a record in AirTable(Others)\n8. Create a record in Airtable(Me)\n\nDescription: short, clear, human-readable description of the action item.\n\nAssigned_To: Use the names that are in this section\n\"Things you've asked others to do\"\n\n\nStatus: one of [\"Working on it\", \"Done\", \"Stuck\", \"\"], default to \"\" unless the transcript explicitly marks it otherwise.\n\nCall Link: The Link of that Call is given.\n\nCall Name: The Name of that Call is given.\n\nrules:\n1. Exclude general discussion, only act on clear action items.\n\n2. Do not invent tasks; extract only what is stated or strongly implied.\n\n3. Each identified task must be immediately created or updated in Airtable.\n\n4. For tasks related to \"**Things you need to do:**\" will be search, update and create in To do list (Me),\nand for others that will done for to do list (others).\n\n5. First use search tools to extract all the data so that will help identify tasks updates etc.\n\n6. Then use update tools if updation is required like updating status.\n\n7. DO NOT Create tasks again if Already present (check semantically, not word by word).\n8. then use Create an item for (Me) and Create an item for (Others) to create records in Monday.com only use task description, that will return item ids as will then use that corresponding ids and create records in AirTable using these two tools: Create a record in AirTable(Others) and Create a record in Airtable(Me).\n\n9. Response at the end with whole tasks in this format:\n[[{\"task description\": \"here will be the task description\"},\n {\"update text\": \"comments on this tasks if discussed in current meeting and created in previous meeting\"},\n {\"status\": \"what about task status is said in meeting\"},\n {\"Person Name\": \"Name of the person to which task is Assigned\"}],\n[...],\n...\n]\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1760,
+        32
+      ],
+      "id": "f1dafe8b-709f-4b16-b765-62cb0d8d83e1",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Create a record in Airtable for those Tasks are assigned to Others.",
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblciB06vAlLYW8K4",
+          "mode": "list",
+          "cachedResultName": "To Do List (Others)",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblciB06vAlLYW8K4"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Description', ``, 'string') }}",
+            "Assigned_To": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Assigned_To', ``, 'string') }}",
+            "Status": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Status', ``, 'string') }}",
+            "Call Name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Call_Name', ``, 'string') }}",
+            "Call Link": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Call_Link', ``, 'string') }}",
+            "Monday.com Item ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Monday_com_Item_ID', `use monday.com item id here`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Task ID",
+              "displayName": "Task ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Call Name",
+              "displayName": "Call Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Call Link",
+              "displayName": "Call Link",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Assigned_To",
+              "displayName": "Assigned_To",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Working on it",
+                  "value": "Working on it"
+                },
+                {
+                  "name": "Done",
+                  "value": "Done"
+                },
+                {
+                  "name": "Stuck",
+                  "value": "Stuck"
+                },
+                {
+                  "name": "",
+                  "value": ""
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Monday.com Item ID",
+              "displayName": "Monday.com Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        1744,
+        560
+      ],
+      "id": "e6ed9dee-29a9-4804-8442-19318eafa2e4",
+      "name": "Create a record in AirTable(Others)",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Create a record in Airtable for those Tasks related to Me.",
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblwjzhqI91KdQzSK",
+          "mode": "list",
+          "cachedResultName": "To DO List (Me)",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblwjzhqI91KdQzSK"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Description', ``, 'string') }}",
+            "Status": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Status', ``, 'string') }}",
+            "Call Name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Call_Name', ``, 'string') }}",
+            "Call Link": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Call_Link', ``, 'string') }}",
+            "Monday.com Item ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Monday_com_Item_ID', `use monday.com item id here`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Task ID",
+              "displayName": "Task ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Call Name",
+              "displayName": "Call Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Call Link",
+              "displayName": "Call Link",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Working on it",
+                  "value": "Working on it"
+                },
+                {
+                  "name": "Done",
+                  "value": "Done"
+                },
+                {
+                  "name": "Stuck",
+                  "value": "Stuck"
+                },
+                {
+                  "name": "",
+                  "value": ""
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Monday.com Item ID",
+              "displayName": "Monday.com Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        1904,
+        560
+      ],
+      "id": "003b476e-152f-43ca-a43d-a7b23f65b272",
+      "name": "Create a record in Airtable(Me)",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Search records or get all in Airtable of To do List of Table that has records of Others.",
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblciB06vAlLYW8K4",
+          "mode": "list",
+          "cachedResultName": "To Do List (Others)",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblciB06vAlLYW8K4"
+        },
+        "filterByFormula": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Filter_By_Formula', `search by given Call Name and Call Link for the Exact rows.`, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        1904,
+        240
+      ],
+      "id": "b6e2b335-6878-4026-a50e-ee88a584ca25",
+      "name": "Search or get all records in Airtable of (Others)",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Search records or get all in Airtable of To do List of Table that has records of Me.",
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblwjzhqI91KdQzSK",
+          "mode": "list",
+          "cachedResultName": "To DO List (Me)",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblwjzhqI91KdQzSK"
+        },
+        "filterByFormula": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Filter_By_Formula', `search by given Call Name and Call Link for the Exact rows.`, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        1744,
+        240
+      ],
+      "id": "b47176ed-be23-4836-b597-5e5ca544d28f",
+      "name": "Search or get all records in Airtable of (Me)",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Update record in Airtable (Others)",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblciB06vAlLYW8K4",
+          "mode": "list",
+          "cachedResultName": "To Do List (Others)",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblciB06vAlLYW8K4"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Task ID": "={{ $fromAI('Task_ID__using_to_match_', ``, 'number') }}",
+            "Status": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Status', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "Task ID"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Task ID",
+              "displayName": "Task ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Call Name",
+              "displayName": "Call Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Call Link",
+              "displayName": "Call Link",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Assigned_To",
+              "displayName": "Assigned_To",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Working on it",
+                  "value": "Working on it"
+                },
+                {
+                  "name": "Done",
+                  "value": "Done"
+                },
+                {
+                  "name": "Stuck",
+                  "value": "Stuck"
+                },
+                {
+                  "name": "",
+                  "value": ""
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        1904,
+        400
+      ],
+      "id": "1aa90e26-bff3-4fed-8061-c4e0e605b668",
+      "name": "Update record in Airtable (Others)",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Update record in Airtable (Me)",
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblwjzhqI91KdQzSK",
+          "mode": "list",
+          "cachedResultName": "To DO List (Me)",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblwjzhqI91KdQzSK"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Status', ``, 'string') }}",
+            "Task ID": "={{ $fromAI('Task_ID__using_to_match_', ``, 'number') }}"
+          },
+          "matchingColumns": [
+            "Task ID"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Task ID",
+              "displayName": "Task ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Call Name",
+              "displayName": "Call Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Call Link",
+              "displayName": "Call Link",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Open",
+                  "value": "Open"
+                },
+                {
+                  "name": "Done",
+                  "value": "Done"
+                },
+                {
+                  "name": "Snoozed",
+                  "value": "Snoozed"
+                },
+                {
+                  "name": "Cancelled",
+                  "value": "Cancelled"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Priority",
+              "displayName": "Priority",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Med",
+                  "value": "Med"
+                },
+                {
+                  "name": "Low",
+                  "value": "Low"
+                },
+                {
+                  "name": "High",
+                  "value": "High"
+                }
+              ],
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        1744,
+        400
+      ],
+      "id": "03b8d675-cd28-4ee1-b833-810d8e460b1d",
+      "name": "Update record in Airtable (Me)",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## To do Agent\n",
+        "height": 784,
+        "width": 368
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        -64
+      ],
+      "id": "87af93bf-307b-4607-8bbc-5ae05511c4ec",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Create an item in a board's group in Monday.com, for Name use Task description.",
+        "resource": "boardItem",
+        "boardId": "2137415769",
+        "groupId": "topics",
+        "name": "={{ $fromAI(\"Name\") }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.mondayComTool",
+      "typeVersion": 1,
+      "position": [
+        2192,
+        480
+      ],
+      "id": "29db2936-5ee9-4fe4-9a21-1899dccccd7d",
+      "name": "Create an item for (Me)",
+      "credentials": {
+        "mondayComApi": {
+          "id": "Gvv16mDLf05X1c1z",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Create an item in a board's group in Monday.com, for Name use Task description.",
+        "resource": "boardItem",
+        "boardId": "2137415769",
+        "groupId": "group_title",
+        "name": "={{ $fromAI(\"Name\") }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.mondayComTool",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        464
+      ],
+      "id": "583085a3-8c4f-429c-8e52-b764a0e9c907",
+      "name": "Create an item for (Others)",
+      "credentials": {
+        "mondayComApi": {
+          "id": "Gvv16mDLf05X1c1z",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "=FINAL STEP — always call this last.\nInput:\n- List (json array) → [[{\"task description\": \"...\",\"update text\": \"...\",\"status\": \"...\",\"Person Name\": \"...\"}], ...]\nPurpose:\n- Send the full list of tasks to the Monday updates workflow.\n",
+        "workflowId": {
+          "__rl": true,
+          "value": "nJgccWswOaFg19ud",
+          "mode": "list",
+          "cachedResultName": "Moday.com Tasks Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "List": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('List', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "List"
+          ],
+          "schema": [
+            {
+              "id": "List",
+              "displayName": "List",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        2400,
+        240
+      ],
+      "id": "d5809578-95b4-4181-8eda-62d4786f589a",
+      "name": "Monaday.com Updates"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=User query:\n{{ $json.output }}",
+        "options": {
+          "systemMessage": "=you are a do list updator.\n[MUST DO] use this \"Monaday.com Updates\" tool and send all tasks data in List format like given below.\n\nDescription: short, clear, human-readable description of the action item.\n\nAssigned_To: Use (Me) if discussed like \"For you\" else use exact Name.\n\n\nStatus: one of [\"Working on it\", \"Done\", \"Stuck\", \"\"], default to \"\" unless the transcript explicitly marks it otherwise.\n\n[[{\"task description\": \"here will be the task description\"},\n {\"update text\": \"comments on previous tasks if discussed in current meeting\"},\n {\"status\": \"what about task status is said in meeting\"},\n {\"Person Name\": \"Name of the person to which task is Assigned\"}],\n[...],\n...\n]"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        2176,
+        32
+      ],
+      "id": "b5f12408-f53c-4c2b-853a-792a7f38d83a",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "content": "## Monday To dos Agent\n",
+        "height": 784,
+        "width": 464
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2080,
+        -64
+      ],
+      "id": "bb227ff1-49a6-4b72-ad56-ccf0b7f98ac0",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -560,
+        848
+      ],
+      "id": "bc477bfc-95cc-4540-8ae7-2ee1190f7d66",
+      "name": "When chat message received",
+      "webhookId": "876f1671-471e-49c4-898b-5c47243e4222"
+    },
+    {
+      "parameters": {
+        "content": "## Testing",
+        "height": 480,
+        "width": 1520
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -608,
+        768
+      ],
+      "id": "d599cf40-09c1-4176-a46d-aed1132b66c5",
+      "name": "Sticky Note13"
+    }
+  ],
+  "pinData": {
+    "Edit Fields": [
+      {
+        "json": {
+          "body": {
+            "fathom transcript": "  00:00:01 - Katherine Medina (Bublishing)\n      Hey everyone, say come on, say come on, say come on.\n  00:00:38 - Kamal Khraisheh (Bublishing)\n      All right, we're waiting on, ZQ isn't joining, Shay.    All right.    Let's get into it, guys.    ZQ, thank you for joining today.    So, yeah, iGenius stuff.    We have a few updates, minor things.    Metrics have been updated.    We have a bunch of cool stuff in the works.    But, yeah, nothing to share much today.    We fixed the data duplication issue.    Thanks for bringing that up, Faycel.    And, yeah, a few other things, but nothing major.    And, yeah, I think I have some other points, but let's just get into updates, and I'll bring them up as they come up.    So, yeah, feel free to start it off, guys.    I can start off.\n  00:01:52 - Allan Belen (Bublishing)\n      My update is we're catching up with the launches for the main ad account currently.    thank you, you, you.    Thank you.    And we'll start working on the TikTok videos on the agency ad account once we have the videos.    I'll reach out to Ferge today so that we can download the videos ourselves so that we can start launching immediately in the agency ad account of these TikTok videos.    And then I'll also add my findings for our call later after this call for the YouTube stuff.    I'll use your stuff.\n  00:02:30 - Kamal Khraisheh (Bublishing)\n      Okay, cool.    Ferds, can you connect with Alan and Mac and make sure that they have the accesses they need to start pulling the TikTok videos and they know which ones are agency ones that they shouldn't touch and which ones they can?    Because I've loaded the agency ad account.    We have tons in there now.    We're ready to scale it up.    So I would like to really test all of the TikToks, as many as possible.    I was telling you, Alan and Mac, like 10 per day so we can start to clear through them.    um so can you connect with them and make sure they have access they need so they can pull those videos and they know what they they need to get from there uh yeah sure i think uh i can do that today uh tonight in our time and i will have a call with them okay please yeah super super important let's get those tiktoks up i think this can be big uh big opportunity any winners also from the tiktoks are like um you know we can recreate them ourselves or just send them to to kind of share with the team but yeah that's gonna be big and um Alan have you guys started on any iterations from the list of iterations that i uh shared with you guys uh the test the yeah the um like different voice different all those ones that i um sent that like excel the google sheets uh we'll look into it because we've launched a few concepts with uh voice iterations eros i\n  00:04:00 - Allan Belen (Bublishing)\n      So already.    We have launched those, okay.\n  00:04:04 - Kamal Khraisheh (Bublishing)\n      Yes.    Okay.    Do we have a separate Google Sheet with those iterations?    No, is it in the main one?    I don't see it in Monday.    Where are you putting those down right now?    It's not on Monday and on the testing log.\n  00:04:33 - Allan Belen (Bublishing)\n      So we're, we're testing it the same way as we've been testing and launching them as a new ad.    Okay.    So that's, um, if you can add those into Monday, please.    Okay.\n  00:04:46 - Kamal Khraisheh (Bublishing)\n      And, uh, yeah, super critical that.    And also like we've started testing.    So we have this new project.    Is Shea in the call?    Yes.    Yeah.    Shea, I already spoke with you about this.    Please connect with Alan and Mac about the.    A new AI hooks project that we're working on and make sure that they're also adding that in the testing so that we're tracking the results of that.    Yeah, super important.    Guys, let's get the iterations tested, as many of them this week as possible.    Connect with some of the strategies, Faycel, maybe you can help.    I know you and Ray worked on the iterations map, but I basically presented a list of like 12 different types of iterations.    We want to test them all.    A lot of them don't require anything from new scripts.    It's usually just like, some of them do require some new scripting, but some of them are just voice change, whatever, whatever.    Let's make sure to test all of those, as many of them we can this week, and just keep an update on that so we can see what we can integrate.\n  00:05:40 - Rayhan Hossain (2)\n      I have, I believe I have five scripts with voice changing tasks.    I have already added that, and Genius, one of them is finished.    So if you guys want, I can give you the CID number, content number, and we can go around here.    Thank you.    Yeah, that would be helpful.\n  00:06:05 - Allan Belen (Bublishing)\n      Yeah, cool.    Thanks.\n  00:06:13 - Faycel Nouaman (Bublishing)\n      So just to understand, so Allan, how would you apply the iterations?    Launch them?\n  00:06:28 - Allan Belen (Bublishing)\n      I guess when the answer is ready, we will launch it, and then we will give you some of our learnings based on results.    Okay.    They should.\n  00:06:42 - Faycel Nouaman (Bublishing)\n      Yeah, we have like a...    Yeah, go ahead.    Yeah, we have a bunch of iterations to test out, and let me see if I have the list.\n  00:06:54 - Kamal Khraisheh (Bublishing)\n      Somewhere here.    We basically just want to test it manually.    Whatever works, we're going to add it to AdGene.    This is like an iteration, and we're pulling in metrics now, the AI iterations and ad genius, you're going to see the performance of them, like average performance and stuff like this, so we can start to like figure out what we want to double down on more, but there's a lot of stuff that we just haven't tested yet, and we just need to collect some data on it.    So, yeah, just manual iterations, run them in ads, and just log the results.\n  00:07:25 - Faycel Nouaman (Bublishing)\n      Also, I think the re-editing, like one is a big one, like is the top performer amongst like all of them, but it was like all the iterations were applied to just one script, so we can't like really, I know, we need like minimum like five, I guess, to know like the, to have them in order, for example, the re-editing, the hook variations, the Yeah, re-editing is one of them, even re-editing of only just the hooks is another iteration, I put down like a bunch, let me just pull up the sheet.\n  00:08:00 - Kamal Khraisheh (Bublishing)\n      Allan, do you have the sheet that I've sent?\n  00:08:05 - Allan Belen (Bublishing)\n      Oh, wait.    Let me find it.    It's here.\n  00:08:25 - Kamal Khraisheh (Bublishing)\n      Oh, yeah, I was in the testing wall.    I forgot that, so I couldn't find it.    Yeah, could you open the iterations tab?    Okay, yeah, so, Faycel, I put these down.    So the iterations, we have all the ones that are already in AdGenius, aspect ratios, two different types there, re-editing the hooks, new voice, stitching best existing hooks, stitching like top three or five hooks, new CTAs, AI Shannon, green screen.    a lot of these are just from, I pulled them from the iteration mind map that you and Ray created, right?    right.    So if you have.    I have new things.    Please suggest them here.    I just want to test all these manually, benchmark, performance, which ones of these perform better, whatever, and then we'll see from there.    So please help if they need any help with it.    But I think most of it is, yeah, like one of them, like the row 16 restructuring in different styles, that will need a different script, you know, but most of them are without.    The Shannon ones, you know, we can test that.    We can give them to Shannon this week, stuff like that.    By the way, can give like to Shannon a whole script.\n  00:09:34 - Faycel Nouaman (Bublishing)\n      Yeah.    So yeah, so I have like to give it like the top performing one.    So she can make like the recipe.    I will brief her like to make the recipe like live, I guess, with the blender, if she can.    That would be great.\n  00:09:57 - Rayhan Hossain (2)\n      For that, for that, that, put the instruction, like.    Yeah, where you want it, like, seriously do that, because I've been working with a stick, I'm sending channels, I'm sick, and one of the new CTN that I got from, Shannon, is working for, like, three, three and four days, it is, you know, above two rows, so I think it will work, yeah.\n  00:10:22 - Faycel Nouaman (Bublishing)\n      Yeah, sure.    Also, one of our competitors, like, they run their ads, their creatives, like, on a kitchen, like, base, and she's making, like, she's making, like, recipes, I guess it's the lost, the lost, homo, potecari or something.    Yeah.\n  00:10:48 - Kamal Khraisheh (Bublishing)\n      Yeah, definitely, I mean, can try all of these.    I mean, also, you know, that could be, like, a normal script, but if it's something that we can recreate, I think the purpose just with those iterations is, like, whatever we can, we can, like, kind of just ramp up from our existing.    Winners, you know, if it's a winner, we can have Shannon make it, whatever, but yeah, like for sure, you know, use Shannon, we have, we have her, you know, send the scripts, she can, she can do stuff within reason, right, within reason, but like, yeah, she can, she can do anything.\n  00:11:15 - Faycel Nouaman (Bublishing)\n      And also, when you, when you, when you say like, AI iterations, like, these also need like, copy-achieving and reviewing, I guess, by the creator strategies, or it goes like, directly?    I mean, it depends on, some of them are like, they don't need, they're not even copy ones, right?\n  00:11:32 - Kamal Khraisheh (Bublishing)\n      Some of them are just like, video, like, re-editing, right?    Or like, re-editing just the hook.    That's something that like, what my idea is, we have a winner, automatically, it's going to get scheduled as a thing for the reader to do, right?    It's hit like, 20,000 in spend, automatically, we re-edit the video, automatically, we stitch existing winning hooks onto it, you know what I mean?    Some of them, it needs human, like, in the loop, some of them, it's just like, scheduled.    True.\n  00:12:00 - Faycel Nouaman (Bublishing)\n      So we can, like, with the AdGene system, we can put the mind map, like, to systemize it, like, for example, it's, okay, good.\n  00:12:12 - Markson King (Bublishing)\n      Exactly, yeah.\n  00:12:16 - Faycel Nouaman (Bublishing)\n      We have a bunch of, like, really, really, like, cool things, also projects that are happening.\n  00:12:21 - Kamal Khraisheh (Bublishing)\n      So I just want to benchmark these this week, guys, if possible, to get these all out this week, all these iterations, right, and then, like, the data, it comes in.    Over the weekend, by Monday, like, next week, we have, like, okay, we've tested, like, we took our top 10 ads and we changed the voice from Shannon to a male voice.    Here's how they performed.    Here's the benchmark across our average, like, ads.    Here's the benchmark across, you know, Alan, just compare, right?    Show the data.    We took our top ads, we re-edited the hooks.\n  00:12:47 - Allan Belen (Bublishing)\n      We didn't change it, we just re-edited the hooks.    That's it.\n  00:12:49 - Kamal Khraisheh (Bublishing)\n      Here's how the performance was the performance.    This is basically what I mean, right?    So just, we want to test all these things and just get benchmarks.\n  00:12:55 - Faycel Nouaman (Bublishing)\n      We can meet Andrey if he's available, we can have a meeting.    And we lined up, like, job ads that we want to, like, maybe just with these, and we'll put them, like, in the sheets, so it's clear for the, for Allan and the rest of the team.    Sounds good.    That'd be good.    Ray is with us.    So, sorry, if, if you, are available, like, later, like, today, or another time, we can, uh, make, uh, 30 or, like, 20 minutes for this.    Yeah, sure.    Just ping me.\n  00:13:42 - Rayhan Hossain (3)\n      Sure, sure.\n  00:13:50 - Kamal Khraisheh (Bublishing)\n      Okay, cool.    Um, on that point, uh, Ray, do we have any updates on, like, the weekly learning meetings, or, um, like, any organizational level stuff?    Yes, I'm creating that meeting today.\n  00:14:03 - Rayhan Hossain (3)\n      After I'm looking at Faisal, I need to know why everyone is available, because previously it was like sometimes, you know, it goes for lunch or anything.    So I need to find a suitable answer.    Okay, yeah, please just keep updated on that.\n  00:14:29 - Markson King (Bublishing)\n      Hey guys, for my update, I have, I'm working on iterating, iterating new ideas.    We're launching our new winners to Shannon Griffith page, and I have added a new test idea.    It's called scaling under-deliberate countries, because I have checked that we have some countries that are performing well on worldwide, but    They spend this low, like only $200 and $200.    These are like Germany, Spain, and some other countries.    So what I'm trying to do is create or compile these countries into one targeting and to see if they're still going to perform if we have given them a higher budget.    Because you're spending prioritizing on the U.S., Australia, and U.K.    All right.\n  00:15:40 - Kamal Khraisheh (Bublishing)\n      Sounds good.    Put it down in the testing logs and try it out.    Yeah.    I'm already working on it.\n  00:15:46 - Markson King (Bublishing)\n      Okay.    Cool.\n  00:15:48 - Kamal Khraisheh (Bublishing)\n      Have you guys got around to trying GPT-5 Pro for anything related to...    No, don't ...stuff?    Okay.    No, I don't don't don't Thank you.    All right.    Thanks, Mac.\n  00:16:22 - Antonette Salcedo (Bublishing)\n      Hey, guys.    Yes.    For my update, I added two VSOs in Genius Ready for Editing and also Image Ads.    And also, Kamal, we added requirement questions in the Facebook group before they can join.    And, yeah, I think we can already send the emails.    Okay.\n  00:16:55 - Kamal Khraisheh (Bublishing)\n      Yeah, I mentioned, I've heard something about this.    We can connect with you about that.    Mm-hmm.    Yeah.\n  00:17:03 - Antonette Salcedo (Bublishing)\n      And Internet, one more thing.\n  00:17:06 - Kamal Khraisheh (Bublishing)\n      Do we have anything for Shannon this week?    Updates on Shannon content?\n  00:17:13 - Antonette Salcedo (Bublishing)\n      For last week, we only had the hooks.    So these are only hooks for the MVSL Shorten and the MVSL NB.    So most of them are doing pretty good, the hold rate and the hook rate.    But we haven't compared this to the original hook.    Yeah, but these all have losing grow assets, right?\n  00:17:50 - Kamal Khraisheh (Bublishing)\n      Yeah, they're unproperable.    This is the issue every single time I face.\n  00:17:57 - Rayhan Hossain (3)\n      Every single time.    I guess there's something with Shannon that gets to...    I mean, internet, like, it doesn't matter if the hook rate and hold rate is good if the ad is unprofitable, right?\n  00:18:10 - Kamal Khraisheh (Bublishing)\n      All of these ROASs are around one.    So, like, none of them are going to work and they've all been killed.    So, like, it doesn't matter if the, I mean, it seems like we have one that's decent, but I don't know.    For me, like, this is, we need to fix this problem, right?    If giving Shannon content to make and the content is coming back unprofitable each time, you know, there's something that needs to be, maybe her appearance is not very professional right now with her shirt and there's something that maybe we need to ask her to wear something more professional.    Maybe we need to look at the ones that performed well, but at the end of the day, like, there's no winners here, right?    If it's not, I mean, it seems like the first one there is 200.    That could be possible, but we had, like, a couple that performed really well, right?    Like, that one of her, the organic style one that performed really well, right?    So, like, what is in there that caused it to work, you know?    She was, I think she was wearing glasses.\n  00:19:01 - Antonette Salcedo (Bublishing)\n      I mean, that's one thing, right?\n  00:19:03 - Kamal Khraisheh (Bublishing)\n      Maybe her appearance could be more professional.    I think if we can compile some things like that and then get it to Shannon, this is the kind of feedback we need to provide Shannon.    Shannon, you need to wear like a lab coat or something, you know?\n  00:19:13 - Antonette Salcedo (Bublishing)\n      Or maybe the one that Ray suggested, like, wear apron.\n  00:19:25 - Rayhan Hossain (3)\n      Yeah, that is really cool.    That is still awesome.    To be honest, one of our CTs wrote, I think, for mine, my, my, launches, uh, it is really, but yeah, not working.    Mm-hmm.    Anyways, on a different note, mean, different than Shannon, I will discuss about this on Shama's topic.    Uh, I believe you can get gaining as a solicitor.\n  00:21:00 - Faycel Nouaman (Bublishing)\n      like the talking head is portraying herself, in front of maybe like wearing something like kitchen, yeah, and this ad got like 17k engagement.    And also, also like just direct, like direct to the, to the camera, talking directly to the camera and also maybe on the background is like herbs and things like that can help, I guess.\n  00:21:45 - Antonette Salcedo (Bublishing)\n      Yeah.\n  00:21:47 - Faycel Nouaman (Bublishing)\n      Yeah, we can also like, not just from creating concepts, can also like model after like the appearance and the scene and the, and the, like how the scene is like portrayed for, for.    Especially from like directs companies just like those.    So I guess someone at the door had to go deal with that.\n  00:22:19 - Kamal Khraisheh (Bublishing)\n      Ferdinand Ramos, were you sharing something?\n  00:22:24 - Faycel Nouaman (Bublishing)\n      Yeah, I should like, let me see.    This is like a direct competitor, and this is like their quote-unquote like authority figure.    We can see like she's in the kitchen, she's wearing like, she's about to create a recipe, and she'll have a lot of like ads like that, and the ads is like very successful.    So, and those also are like direct competitors, we can get inspired by, by the scene, and like how they, how they work with the authority figure.    Yeah, a hundred percent.    I mean, for me, like.\n  00:23:00 - Kamal Khraisheh (Bublishing)\n      Like, this is Nicola Pellion.    Like, they're a very, very popular brand, right?    So they've done, like, The Lost Book of Herbal Remedies before.    They have a few.    100%.    Like, Shannon does not look professional in this shot.\n  00:23:12 - Rayhan Hossain (3)\n      And this is something that we need to convey to her, right?\n  00:23:13 - Kamal Khraisheh (Bublishing)\n      In a nice way, like, put on a, you know, so that could be one important thing there.    And, but like, yeah, if the ads are not performing, they're not performing, right?\n  00:23:22 - Faycel Nouaman (Bublishing)\n      So this is a key thing is we should fix them.\n  00:23:24 - Kamal Khraisheh (Bublishing)\n      Because we have some that performed well.    What's the key characteristics that are similar?    Yeah.    I guess we can, we can bring that up, like, in our next episode.\n  00:23:34 - Rayhan Hossain (3)\n      Yeah, guys.    I'm sharing my experience over here.    And as, am I on the call, by the way?    Sometimes, like, I believe I'm not on the call.    Am I on the call with this?    Yeah, yeah.    Yeah, yeah.    So, this is a new CTA, right?    And it is in UGC stand.    By UGC stand, I'm also with the standards.    So, she, she opens it up and then goes on, like, you know, UGC style and shows everything.    So,    Point it out, multiple tabs, multiple tabs, then, and here our editors, what our editors did, they sometimes took footages, swapped footages from Shannon to, you know, some of our, this is, this has come out right away, and this is Shannon, this is Shannon's page.    So sometimes, you know, they swapped it because the moment you are showing them, they don't know who it is, just the voice is there.    And it performed really great, not that much good, I would say, but for, you know, for last few days, it worked, you know, it's the state, mean, my, profitable.    This is the only one that is still profitable, this quite, you know, booklet being a bit lower.    So I believe it is, know, with Shannon, it is always the root, and sometimes what we are not doing with Shannon's footage, we are not using B-rolls.    So if you use, you know, enough B-rolls, enough B-rolls in some English, like the one that Faisal showed, maybe it would go right, and also this, this picture.    not monodones, so yeah.\n  00:25:06 - Faycel Nouaman (Bublishing)\n      By the way, the use of B-roll of like when she's like having her glass and it's like a selfie style doesn't perform at all.    I did like an iteration similar to the re-editing and the editor like did those and I let it go to see how it performs and it didn't perform.    at all because it doesn't portray like an authority figure or an herbalist like that is saying the phrase that he should say, she should say.    Okay.\n  00:25:53 - Kamal Khraisheh (Bublishing)\n      Faisal, can you share the ad link of Nicole wearing the apron and stuff so that we, Antonette can.    Share this with Shannon.    This one?    And like you guys, yeah, the one that you shared your screen on.    And like, yeah, I guess if you're asking Shannon to make stuff, you can always like put like a request, right?    Like put a screenshot or something like, you know, this would be the appearance, whatever.    But Antonette, maybe you can share this with Shannon and say like, this is doing really well, right?    So maybe we should try to model something like that.    Hi, sir.    When you, I mean, feel free to, you know, create the content for Shannon.\n  00:26:28 - Rayhan Hossain (3)\n      It's good for Shannon.    Shannon's best-selling is good.    Only thing you have to do is external sources, mark Shannon, and then from here, Shannon as well, and then add it, yeah?    Feel free to do it.    Sure, Yeah.    And for the, you know, for, this is a hack I'm doing right now for like, you need to, you do something, something.    And if there is any specific instruction, I write it in second bracket.    So you don't have to create a, you know, friction like adding a Google document or something like that.    So anyways, I mean, feel free to do it.\n  00:27:23 - Kamal Khraisheh (Bublishing)\n      All right guys, we've got our call with Shannon soon, so can we run through the rest of the updates please?\n  00:27:31 - Salman Baig (Bublishing)\n      Yeah, so from my hand, I am working on this week's scripts, primarily like this week I am focusing more on the short form content, I'm experimenting with some really good statics, and I'm also looking to create some really short 10 seconds, 15 seconds, like DOV videos, and there was one more concept that I've been, when I was doing the research, like that story.    selling approach, like without the script wheel, but like having like a text overlays, so I'm thinking of experimenting with that for like this week, along with creating some other scripts for the guides.    So yeah, that's like an update from my end.    Okay, thanks Salman.\n  00:28:36 - Kamal Khraisheh (Bublishing)\n      On the new products, just one second, Katherine, there's a, I'm going to have the product team come and share the, I'm having them basically make a presentation for each product that we release, so that you guys get like the key features, detail, like breakdown, not like, you know, word doc, but like more like visual representations that you guys understand, like, sort of like, what is the purpose of    This product, what's a customer here to benefit from this?    So we'll have the two-week liver plan, maybe we'll show that with the rest of you guys tomorrow, maybe, hopefully.    We'll see.    But yeah, I think that'll be good to kind of get a much better look at why we built this, right?    What's the purpose there?\n  00:29:28 - Salman Baig (Bublishing)\n      Go ahead, Katherine.\n  00:29:33 - Katherine Medina (Bublishing)\n      Okay, so for my update, I'm adding strips for the new guides and for the other products as well.    So after revising, I'll be quoting them.    And I'm adding my learnings, I'm going to sub-concepts too.    And then just recently, I noticed when I've tried adding a concept for joint team, the compliance check flagged me for accuracy mismatch.    It says on the document that it's 60-day money-back guarantee, but the compliance checker says that it's only 30 days.    So I think this is an error as well.    Please share that in the iGenius channel and tag Marge.\n  00:30:10 - Kamal Khraisheh (Bublishing)\n      Okay, sure.    All right, cool.    Thanks, Katherine.    So guys, updates on my end.\n  00:30:24 - Faycel Nouaman (Bublishing)\n      I've seen, like, one script for, one concept for the recipe guide was, like, winning, it's going up and down, maybe I will create, like, some, a few more, and also, like, focus on the NHH, and we'll have, like, assets in the Applied Iteration System this week, and have also a call with Ray to review the creatives and brainstorm, like, ways how we can improve, like, things in the company.\n  00:31:01 - Kamal Khraisheh (Bublishing)\n      Cool.    Thanks, Khaisan.\n  00:31:10 - Rayhan Hossain (3)\n      All right.    I think that's everything.\n  00:31:12 - Kamal Khraisheh (Bublishing)\n      Anyone else got anything they want to share?    All right.    Then we can go ahead and wrap it up.    Thanks so much, everyone.    Have a great rest of your day.    Thanks, guys.    a great rest of Bye.\n  00:31:31 - Allan Belen (Bublishing)\n      Bye.    Bye.    Bye.    Bye.    Bye.    Bye.    Bye.    Bye.    Bye.    Bye.    Bye.    Bye.\n",
+            "Meeting_Title": "Creatives Check In",
+            "Meeting_Scheduled_start_time": "2025-08-26T08:30:00Z",
+            "Recording_URL": "https://fathom.video/calls/389908814"
+          }
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Slack Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "2k Summary",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Call Categorization",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Slack Summary",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Creatives",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Engineering",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Product",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Other",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2k Summary": {
+      "main": [
+        [
+          {
+            "node": "Call Categorization",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Categorization": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Creatives": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Engineering": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Product": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Other": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Summary": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "2k Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send log message": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Status (Me)1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many items in Monday.com": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an item in a board's group in Monday.com": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Change a column value for a board item in Monday.com": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Monday.com column change Person": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Airtable": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Monday.com column change Date": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record in AirTable(Others)": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record in Airtable(Me)": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search or get all records in Airtable of (Others)": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search or get all records in Airtable of (Me)": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update record in Airtable (Others)": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update record in Airtable (Me)": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an item for (Me)": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an item for (Others)": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Monaday.com Updates": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Send log message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "2d3e1d69-b7e8-4608-9269-9dbeceeda76f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d8261ad00fdf12d22c26fe1d7052f1dc7e37753f7ae4a5f6f52933422938b8f5"
+  },
+  "id": "lQBbCI9UtBuPQjB8",
+  "tags": []
+}

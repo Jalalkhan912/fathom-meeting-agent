@@ -1,0 +1,687 @@
+{
+  "name": "Fathom Agent Phase 3",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "Full call Transcript"
+            },
+            {
+              "name": "Recording URL"
+            },
+            {
+              "name": "Meeting Title"
+            },
+            {
+              "name": "Table Name"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -320,
+        -32
+      ],
+      "id": "5541eb2f-6a42-444c-86b0-3f7dee2ef648",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Full Call Transcript:\n{{ $json['Full call Transcript'] }}\n\n\nBusiness Context:\nContext 4: Business Overview\nAncient Remedies is a direct response e-commerce brand that produces natural health books and guides, primarily targeting the 40+ market. Our products focus on helping people get healthier at home using everyday ingredients—teaching simple, natural approaches to self-care and wellness without relying on anything special or exotic. We acquire approximately 30,000 new customers each month, with sales split roughly 50/50 between the U.S. and international markets, with 85% of sales coming from the Big 5 (US, UK, CA, AU, NZ). Our advertising is primarily through Facebook and YouTube, using video ads that lead to an advertorial, followed by a sales page, checkout, and post-purchase upsells. While we initially relied on 30-minute video sales letters, we’ve since shifted toward short-form video content, including shorter VSLs and video shorts, which now drive the bulk of our performance.\nGeneral Shipping Info:\nFor US/UK/AU/CA - ships from local warehouse in 3-5 business days\nRest of world - 7-10 days\nTracked and insured shipping\n60 day money back guarantee on all products.\n\n\nOur Vision:\nOur vision is to create the world’s most accessible, scientifically backed, beautifully designed, and easy-to-use natural health products—empowering people everywhere to take charge of their well-being from the comfort of their own homes. We believe that true health doesn’t require expensive treatments or exotic ingredients; it begins with knowledge, intention, and the simple things already in your kitchen. By making timeless wisdom practical and actionable, we aim to become a global force for good—improving lives at scale through: better health, more vitality, and greater self-reliance for millions around the world.\n\nContext 5: Org Chart \n(rev 13 July 2025)\nRemote-first, Texas-registered (LLC ➜ S-Corp). Team hubs: Philippines (70%), rest distributed primarily across Asia, with a few in Europe\n~47 full time contractors as of Aug 22\n\n\n\nPartners / Leadership\nKamal – Co-founder & CEO\n\n • Owns product development, creatives, engineering, overall vision\n\n\nJack – Partner (joined Feb 2023)\n\n • Owns conversion/CRO and physical supply chain\n\n\nZain – Co-founder\n\n • Owns operations, channel expansion, affiliate & organic programs\n\n\n\nProduct Development \nOwner: Kamal\n\n\nMarj – Project coordination / acting product lead\n\n\nHannah – Content & concept lead (new ideas, recipe R&D)\n\n\nPau – Lead product designer\n\n\n\nCreative & Media\nRay (Rayhan) – Senior creative strategist\n\n\nFaycel – Creative strategist (strong performer)\n\n\nAntoinette – VSL specialist\n\n\nMac – Junior media buyer (internal up-skill)\nKatherine – Junior copywriter (test phase)\nAlan – Senior media-buyer \nSalman - Junior creative strategist\n\n\nShanon – Authority-figure content creator (face of brand in media)\nVideo Editing\nShaina – Lead video editor\n\n • Team: 8/9 video editors under Shai\n\nUGC / Affiliate / Organic\nFerdinand – UGC outreach, whitelisting, affiliate support\n\nPhoebe – Affiliate manager\n\nZain – Oversees affiliate and organic strategy (ties back to leadership)\n\n\n\nEngineering\nOwner: Kamal (Head of Engineering)\n\n\nMehakpal “MP” – Senior engineer (Ad Genius creatives)\n\nKajal – Engineer (Ad Genius creatives)\n\nVanshdeep – Engineer (funnel & CRO builds) - under Jack\n\nArshaan - recently started, backend engineer\n\nAlex – App developer - under Jack/Funnel team\n\nConversion / Funnel CRO\nOwner: Jack\n\nAndy – Head of CRO\n\nNica – Funnel specialist\n\nMary – Funnel specialist\n\nRaj – Web developer (funnels)\n\nJinali – Funnel developer\n\nYumna – Mock-up designer\n\nEmail marketing: Harris’s agency (external; interfaces via funnel team)\n\nFulfilment & Operations\nShoaib – Senior office manager (warehouse / 3PL liaison)\n\nHamza – Assistant office manager\nCustomer Support (5): Regine, Rana, Rosalie, Marakar, Jam\n\nG&A\nAlfred – HR & recruiting lead\n\nAccounting team – Bookkeeping (external)\n\nTax & compliance: new external tax team onboarding\n\nExternal Agencies / Vendors\nInceptly – YouTube ads agency (handles media buying only)\n\n\nEmail agency – Harris (primary contact)\n\nContext 6: Audience Overview\nAncient Remedies customers—largely health-conscious, skeptical of mainstream medicine, and strongly motivated by either serious chronic ailments or a desire to live more “naturally”—respond best to well-structured, easy-to-implement guides and references. Focus on condition-specific solutions, practical how-to steps, and real synergy-based remedies.\n\nDemographics & Life Stage\nAge Range: Primarily 45–75. Many are retirees or approaching retirement and want to preserve/improve health.\nGender: Both men and women, but there is a slight lean toward women (often the household caretaker or family health “researcher”).\nLocation: Predominantly the U.S., Canada, UK, Australia, and New Zealand—but with scattered international buyers (sell in 130+ countries). \nLifestyle:\nA mix of suburban, rural, and small homesteads. Many have gardens (or want to start one).\nSome are “preppers” or folks wanting self-sufficiency in uncertain times.\nOthers are simply trying to age gracefully and avoid heavy reliance on doctors.\nPsychographics & Beliefs\nStrong Distrust of Big Pharma: They feel over-prescribed or neglected by modern medicine. Many have experienced frustration with doctors pushing medications rather than root-cause solutions.\nDesire to Return to ‘Nature’s Pharmacy’: They believe real healing often comes from plants, herbs, and ancestral wisdom, not labs.\nDIY and Self-Reliant Mindset: They want practical, hands-on knowledge they can apply at home—especially if finances or healthcare availability is limited.\nFamily-Centric: A good portion want to help their spouse, children, grandchildren, or elderly parents. They see “healthy living” as a gift to pass down.\nConcerned About Aging Well: Many mention fear of mental decline (memory, dementia), joint pain, inflammation, arthritis, diabetes, heart issues, or kidney problems.\nValue High-Quality Learning Materials: Physical, easy-to-reference guides are key. They’re sick of half-baked internet info and value a trusted “one-stop-shop” resource.\n2. Biggest Pain Points and Challenges\n1) Chronic Conditions & Inflammation\nDiabetes (type 2 especially) is top of mind.\nHigh blood pressure, high cholesterol.\nAutoimmune disorders (arthritis, fibromyalgia, hypothyroidism, etc.).\nKidney disease (many at stage 3 or above, worried about dialysis).\nInflammatory issues: joint pain, gout, scleroderma, etc.\n2) Disillusionment with Conventional Medicine\nFeeling “stuck” on multiple prescriptions with side effects.\nDistrust after seeing repeated “band-aid fixes” that do not address the root cause.\nNegative experiences with doctors, hospitals, or a family member’s poor outcome.\n3) “Getting Older” Concerns\nReduced mobility, fatigue, and fear of cognitive decline.\nMenopause / hormone imbalances, hair loss, declining vitality.\nWeight gain and struggles with diets that never last.\n4) Accessibility & Ease of Use\nThey want clarity on dosages (which many herbal books fail to provide).\nStep-by-step instructions (how to brew, how to make tinctures, balms, teas).\nQuick references. They love the laminated card format, bullet points, and pictures.\n5) Financial / Budget Pressures\nMany on fixed incomes or Social Security.\nThey worry about paying for medications, so they seek cheaper and more “natural” ways.\nInternational customers are also wary of currency conversion rates and shipping costs.\n\nContext 7: Products Overview\n\n1. Ancient Remedies Revived (ARR)\nPrice / Format: $37, full-color paperback or embossed hardcover (288 pp).\n\nCore value: Big, “encyclopedia” style reference—250+ herb profiles, synergy recipes, disease index.\n\nTake-away for dev: Customers loved the depth and pretty visuals but found it heavy to use in the kitchen; asked for quicker, condition-specific guidance. ARR proved the appetite for physical, premium design.\n\n2. Recipe Cards (6-card bundle)\nPrice / Format: $29.99 laminated, wipe-clean kitchen cards.\nCore value: “Quick-grab” recipes & herb synergies for six top concerns (Memory, Heart, Blood Sugar, Kidney, Breathing, Mobility).\n\nDev lesson: Portability + waterproof format solved ARR’s usability pain. Positive feedback on niche-specific cards → guided us toward modular products.\n\n3. Natural Healing Handbook (NHH) – current flagship, ~90 % of revenue\nPrice / Format: $37 spiral-bound hardcover (80 pp).\n\nCore value: Condenses ARR wisdom into 120+ step-by-step remedies across 15 health categories; easy lay-flat design.\n\nDev lesson: Customers want actionable shortcuts over encyclopedic detail. The spiral format and recipe-first layout became our new template.\n\n4. Condition Recipe Guides (5 SKUs)\nPrice / Format: $29.99 leather-bound, 12 pp each.\n\nTopics: Joint Pain, Blood Sugar, Digestion, Brain, Heart.\n\nCore value: Ultra-condensed herb lists + 10 quick recipes per sheet for sufferers who need one focus area.\n\nDev lesson: Micro-products convert well as upsells; reinforce desire for targeted, visually appealing references.\n\nUpcoming (next 60 days)\nKids’ herbal picture book (ages 5-7)\n\n\n14-day Liver Detox guide\n\n\n“Nature’s Kitchen” stand-up flipbook (countertop recipes)\n\n\nFreemium AI health-advice app (MVP)\n+ more\n\n\n\nWhat this tells us about the customer journey\nPhysical-first, reference-style formats convert best (books → cards → cheat-sheets).\n\n\nEase & specificity trump exhaustive detail—hence the move from ARR → NHH → cheat-sheets.\n\n\nDesign & durability (laminated, spiral, leather) are value levers customers happily pay for.\n\n\nEach new SKU should either:\n\nSolve a narrower health pain in seconds or\n\nMake existing info faster to access (format innovation).\n\nContext 8: Distilled Creative Learnings\nCore Patterns in Winning Ads\nStrong Hooks Matter Most: The top-performing ads immediately call out a specific pain point (e.g., digestion, blood sugar, forgetfulness) in a natural, unscripted tone.\n\nRecipe-led Value: Audiences love simple, actionable recipes that appear in the book, especially when they:\n\nUse basic kitchen ingredients\n\nInclude synergy explanations or basic science/stats for credibility\n\nTie back clearly to solving a problem\n\nAuthenticity Beats Polish:\n\nFiller words (“um”, “like”) enhance relatability\n\nNeutral or calm delivery outperforms overly emotional styles\n\nSimple captioning (white/yellow, no emojis) fits low-production UGC best\n\nEffective Structure Template:\n\nProblem/Pain Point Hook\n\nPresent easy recipe/solution\n\nPersonal anecdote/testimonial\n\nShow other book contents briefly\n\nSoft but clear CTA (e.g., “It’s on sale, came in 5 days”)\n\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are an advanced research agent for writing a step-by-step guide to solve the task if its complicated and need advanced reseach.\n\nYou will need the following:\n1. action point (to do task).\n    for this you can use the tool \"Get To dos in Airtables\" for searching and loading the tasks.\n    there are two tables: 1. To DO List (Me) 2. To Do List (Others).\n2. call transcript (for context given as input as a Full Call Transcript).\n3. past calls condensed summary:\n    for this you can use the tool \"Get Summaries in Airtables\" for searching and loading the full summaries of the previous calls that belongs to that same call Name in specific table.\n    Table Name is: \"{{ $json['Table Name'] }}\", Meeting Title: \"{{ $json['Meeting Title'] }}\"\n\n4. business context (given as input).\n5. recording url: {{ $json['Recording URL'] }} (This will be used to extract specific data from tables).\n\nRules:\nTake all the action points and only do advanced research for those tasks that you can do advanced research on them.\n\nCompiles results, synthesizes short response\n\nThen recommend people to reach out to, to action on things, with pre-crafted message\n\nIf the Tasks is from table: \"To DO List (Me)\" then in \"pre-crafted message\" it should be started like: **To be sent to Kamal**\n\nreturn the output in a list of structured JSON format for each task.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -112,
+        -32
+      ],
+      "id": "9faa86c1-1d2c-4644-af12-c01ece24cb09",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {
+          "temperature": 0.2
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        224
+      ],
+      "id": "125cf86d-4d59-4566-ae2f-e824a8bab808",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "npKSRVeGjp36H8Xf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Table', ``, 'string') }}",
+          "mode": "id"
+        },
+        "filterByFormula": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Filter_By_Formula', `filter column \"Call Link\" by given recording url. to get specific tasks.`, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        32,
+        224
+      ],
+      "id": "adee527d-cfd3-4447-a3dd-5c28d1072a68",
+      "name": "Get To dos in Airtables",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Table', ``, 'string') }}",
+          "mode": "id"
+        },
+        "filterByFormula": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Filter_By_Formula', `filter column \"Call Name\" by given Meeting Title. to get specific Full Summaries.`, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        -96,
+        224
+      ],
+      "id": "f53be3b1-a72d-41a4-9afb-9dda7db49ab6",
+      "name": "Get Summaries in Airtables",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "[\n  {\n\t\"Task_Description\": \"here will be the actual task description\",\n\t\"next steps\": \"here will be the advanced research step-by-step gauid that what should be done.\",\n    \"pre-crafted message\": \"here will be the recommended people to reach out to, to action on things etc, with pre-crafted message\"\n},\n  {\n\t\"Task_Description\": \"here will be the actual task description\",\n\t\"next steps\": \"here will be the advanced research step-by-step gauid that what should be done.\",\n    \"pre-crafted message\": \"here will be the recommended people to reach out to, to action on things etc, with pre-crafted message\"\n}\n]\n  "
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        160,
+        224
+      ],
+      "id": "2d310883-d5a1-47d5-b73c-eb800bdfeba3",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output",
+        "include": "selectedOtherFields",
+        "fieldsToInclude": "Task_Description, next steps, pre-crafted message",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        240,
+        -32
+      ],
+      "id": "ef97b336-4f43-4bd2-a71e-b203892ac278",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "content": "## Advanced Research Agent\n### This Agent will do the Advanced Research for each action point (task) that it think it need research.\n### Currently only utilizing Gemini.",
+        "height": 544,
+        "width": 1616
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -400,
+        -160
+      ],
+      "id": "7b909502-1156-4594-938d-3807d72625c5",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Table', ``, 'string') }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        528,
+        208
+      ],
+      "id": "4fe37065-fc91-4162-8b7d-37345411efd8",
+      "name": "Get To dos in Airtables1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"table\": \"here will be table name\",\n    \"Task Description\":\"here will be the exact task description input by user\",\n    \"next steps\": \"exact input of the next steps\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        672,
+        224
+      ],
+      "id": "7edda7a9-b306-4bcd-a76a-b90675617ff5",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Task:  {{ $json.output.Task_Description }}\n\nnext steps: \n{{ $json.output['next steps'] }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=use the tools and search for the user input task and return the Monday.com id of the task and name of the table in which this task was found.\n\nYou will need the following:\n1. action point (to do task).\n    for this you can use the tool \"Get To dos in Airtables1\" for searching the task.\n    there are two tables: 1. To DO List (Me) 2. To Do List (Others).\n\n2. Task description should be return as it is.\n\n3. also return \"next steps\" inputs as it is."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        -32
+      ],
+      "id": "ac324622-6cae-4ae8-9ca1-6acbfac7974d",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "operation": "getAll",
+        "boardId": "2137415769",
+        "groupId": "topics",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.mondayComTool",
+      "typeVersion": 1,
+      "position": [
+        1472,
+        -144
+      ],
+      "id": "75fe9655-66d2-4bb6-b888-82826c637649",
+      "name": "Get many items in Monday.com",
+      "credentials": {
+        "mondayComApi": {
+          "id": "Gvv16mDLf05X1c1z",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=User query:\ntask description: {{ $json.output['Task Description'] }}\n\nupdate text: {{ $json.output['next steps'] }}",
+        "options": {
+          "systemMessage": "=The user input will be \"task description\", \"update text\" to update on Monday.com item.\n\nyour tasks are the following:\n1. first load all the items by using this tool \"Get many items in Monday.com\", this will contain many fields and its id use the specific id to add update.\n\n2. Use this \"Update Status (Me)\" tool to add an update to monday.com group item."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1344,
+        -384
+      ],
+      "id": "2489b801-186e-46fd-95e4-0c6535420a34",
+      "name": "To Do Agent (Me)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cefe8b49-9dc2-42dc-a883-232c94e034e5",
+              "leftValue": "={{ $json.output.table }}",
+              "rightValue": "To DO List (Me)",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        848,
+        -32
+      ],
+      "id": "aa6de43e-9621-4f9d-b4eb-70beddebcfb5",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "operation": "getAll",
+        "boardId": "2137415769",
+        "groupId": "group_title",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.mondayComTool",
+      "typeVersion": 1,
+      "position": [
+        1472,
+        400
+      ],
+      "id": "016fe938-38d1-4aba-aa4d-82c2b151950b",
+      "name": "Get many items in Monday.com1",
+      "credentials": {
+        "mondayComApi": {
+          "id": "Gvv16mDLf05X1c1z",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "operation": "addUpdate",
+        "itemId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item_ID', `use item id here`, 'string') }}",
+        "value": "={{ $fromAI('Update_Text', `The Update Text should be Plan text`, 'string') }}"
+      },
+      "type": "n8n-nodes-base.mondayComTool",
+      "typeVersion": 1,
+      "position": [
+        1632,
+        400
+      ],
+      "id": "7085c576-1dcc-4159-8837-00300adf1aab",
+      "name": "Update Status (Others)",
+      "credentials": {
+        "mondayComApi": {
+          "id": "Gvv16mDLf05X1c1z",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "operation": "addUpdate",
+        "itemId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item_ID', `use item id here`, 'string') }}",
+        "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Update_Text', `The Update Text should be Plan text`, 'string') }}"
+      },
+      "type": "n8n-nodes-base.mondayComTool",
+      "typeVersion": 1,
+      "position": [
+        1632,
+        -144
+      ],
+      "id": "de9a6667-22c8-4de1-a06b-2e4bee534627",
+      "name": "Update Status (Me)",
+      "credentials": {
+        "mondayComApi": {
+          "id": "Gvv16mDLf05X1c1z",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=User query:\ntask description: {{ $json.output['Task Description'] }}\n\nupdate text: {{ $json.output['next steps'] }}",
+        "options": {
+          "systemMessage": "=The user input will be \"task description\", \"update text\" to update on Monday.com item.\n\nyour tasks are the following:\n1. first load all the items by using this tool \"Get many items in Monday.com1\", this will contain many fields and its id use the specific id to add update.\n\n2. Use this \"Update Status (Others)\" tool to add an update to monday.com group item."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1344,
+        144
+      ],
+      "id": "3d5aa7a6-9ccd-46e4-b915-d2b1e2c43b4a",
+      "name": "To Do Agent (Others)"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        -144
+      ],
+      "id": "1ead4e51-5e85-40d7-87d9-428ad0ece9a1",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "npKSRVeGjp36H8Xf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Agent Handle My Tasks Updates",
+        "height": 496,
+        "width": 544
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        -464
+      ],
+      "id": "aa8ec1a7-9fc4-43ac-aa28-9b2216b63b2f",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Agent to Handle Others Tasks Updates",
+        "height": 544,
+        "width": 544
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        48
+      ],
+      "id": "1acc6484-9bc2-43ca-8050-449c4c39d1f5",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1296,
+        400
+      ],
+      "id": "758aa409-cee2-4923-8782-3251c1cff312",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "npKSRVeGjp36H8Xf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get To dos in Airtables": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Summaries in Airtables": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get To dos in Airtables1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many items in Monday.com": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Me)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "To Do Agent (Me)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "To Do Agent (Others)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many items in Monday.com1": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Others)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Status (Others)": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Others)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Status (Me)": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Me)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "To Do Agent (Me)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "To Do Agent (Others)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e322b95f-2ed5-4309-87ea-9048f33c537d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d8261ad00fdf12d22c26fe1d7052f1dc7e37753f7ae4a5f6f52933422938b8f5"
+  },
+  "id": "3GvUxWl2GthVFt5W",
+  "tags": []
+}

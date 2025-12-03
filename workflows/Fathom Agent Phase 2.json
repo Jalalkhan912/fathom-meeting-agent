@@ -1,0 +1,1868 @@
+{
+  "name": "Fathom Agent Phase 2",
+  "nodes": [
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "include": "specifiedFields",
+        "fieldsToInclude": "Call Name, Full Summary, Date",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        272,
+        -304
+      ],
+      "id": "f09d0103-f6eb-443b-a2ff-0d11f1487763",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "include": "specifiedFields",
+        "fieldsToInclude": "Call Name, Full Summary, Date",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        272,
+        -128
+      ],
+      "id": "081fee8e-cdab-4ee6-94a2-33abbf6dfa90",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "include": "specifiedFields",
+        "fieldsToInclude": "Call Name, Full Summary, Date",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        272,
+        64
+      ],
+      "id": "8a518df9-9721-467b-8e37-1658f3640748",
+      "name": "Aggregate2"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "include": "specifiedFields",
+        "fieldsToInclude": "Call Name, Full Summary, Date",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        272,
+        240
+      ],
+      "id": "27765529-5979-49d5-b7a6-fb44827058b8",
+      "name": "Aggregate3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fffa1be2-8315-442a-b1f6-e6b0aeaa0874",
+              "name": "callName.name",
+              "value": "={{ $json.callName.name }}",
+              "type": "string"
+            },
+            {
+              "id": "a359de29-ddd3-4f72-9874-7461f546aa77",
+              "name": "callName.old_summaries",
+              "value": "={{ $json.callName.old_summaries }}",
+              "type": "string"
+            },
+            {
+              "id": "0c056cd4-8df5-4211-a769-e508336f203c",
+              "name": "callName.Today_Summaries",
+              "value": "={{ $json.callName.Today_Summaries }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        672,
+        -32
+      ],
+      "id": "44a78284-20f3-44f6-900d-7ad664687b11",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=todays_calls:\n\ncall_name: {{ $json.callName.name }}\ncondensed_summary: {{ $json.callName.Today_Summaries }}\nhistorical_by_call_name: {{ $json.callName.old_summaries }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are an executive summarizer for Ancient Remedies. Your job: at the end of each day, produce one concise paragraph per team (Call Name) describing how things are progressing.\n\nInputs:\n\n  - business_context: brand, audience, products, and creative learnings (see the below Business Context text). \n\n  - todays_calls: { call_name, condensed_summary } where condensed_summary is the 1–2k word summary of each call that happened today.\n\n  - historical_by_call_name: a condensed summary of all preceding calls with the same call_name.\n\nWhat to do:\n\n1. For each unique call_name present today, synthesize todays_calls[].condensed_summary for that name plus historical_by_call_name[call_name].\n\n2. Extract only decision-level information and outcomes: progress vs. plan, key decisions, owners, metrics (spend, CAC/CPA, CTR/CVR/ROAS, revenue), blockers/risks with mitigation, and the immediate next step + ETA.\n\n3. Weave in any relevant constraints or priorities from the business context (brand, audience, product focus, channels, creative patterns).\n\n4. De-duplicate and prefer the newest information when conflicts appear.\n\nOutput:\n\n  - Produce exactly one paragraph (4–6 sentences, ≤120 words) per call_name, prefixed by Team: <Call Name> — .\n\n  - Tone: crisp, executive, neutral; avoid minutes, acronyms without first mention, fluff, or bullet points.\n\n  - Format examples to include metrics when present: “ROAS up 12% WoW to 1.9”, “Launched 3 hooks”, “Blocked by shipping delay; Jack owns fix by Tue.”\n\n  - Do not restate the inputs or mention the process; just the paragraph(s).\n\nExample (structure only):\n\nTeam: Media Buying — We advanced X by doing Y. ROAS moved from A to B on $S spend, driven by <driver>. Decided <decision> (owner: Name) and queued <next action> due <date>. Risks: <risk> with <mitigation>. Overall on track to <milestone>.\n\nBusiness Context:\n\nContext 4: Business Overview\nAncient Remedies is a direct response e-commerce brand that produces natural health books and guides, primarily targeting the 40+ market. Our products focus on helping people get healthier at home using everyday ingredients—teaching simple, natural approaches to self-care and wellness without relying on anything special or exotic. We acquire approximately 30,000 new customers each month, with sales split roughly 50/50 between the U.S. and international markets, with 85% of sales coming from the Big 5 (US, UK, CA, AU, NZ). Our advertising is primarily through Facebook and YouTube, using video ads that lead to an advertorial, followed by a sales page, checkout, and post-purchase upsells. While we initially relied on 30-minute video sales letters, we’ve since shifted toward short-form video content, including shorter VSLs and video shorts, which now drive the bulk of our performance.\nGeneral Shipping Info:\nFor US/UK/AU/CA - ships from local warehouse in 3-5 business days\nRest of world - 7-10 days\nTracked and insured shipping\n60 day money back guarantee on all products.\n\n\nOur Vision:\nOur vision is to create the world’s most accessible, scientifically backed, beautifully designed, and easy-to-use natural health products—empowering people everywhere to take charge of their well-being from the comfort of their own homes. We believe that true health doesn’t require expensive treatments or exotic ingredients; it begins with knowledge, intention, and the simple things already in your kitchen. By making timeless wisdom practical and actionable, we aim to become a global force for good—improving lives at scale through: better health, more vitality, and greater self-reliance for millions around the world.\n\nContext 5: Org Chart \n(rev 13 July 2025)\nRemote-first, Texas-registered (LLC ➜ S-Corp). Team hubs: Philippines (70%), rest distributed primarily across Asia, with a few in Europe\n~47 full time contractors as of Aug 22\n\nPartners / Leadership\nKamal – Co-founder & CEO\n\n • Owns product development, creatives, engineering, overall vision\n\nJack – Partner (joined Feb 2023)\n\n • Owns conversion/CRO and physical supply chain\n\nZain – Co-founder\n\n • Owns operations, channel expansion, affiliate & organic programs\n\nProduct Development \nOwner: Kamal\n\nMarj – Project coordination / acting product lead\n\nHannah – Content & concept lead (new ideas, recipe R&D)\n\nPau – Lead product designer\n\nCreative & Media\nRay (Rayhan) – Senior creative strategist\n\nFaycel – Creative strategist (strong performer)\n\nAntoinette – VSL specialist\n\nMac – Junior media buyer (internal up-skill)\nKatherine – Junior copywriter (test phase)\nAlan – Senior media-buyer \nSalman - Junior creative strategist\n\nShanon – Authority-figure content creator (face of brand in media)\nVideo Editing\nShaina – Lead video editor\n\n • Team: 8/9 video editors under Shai\n\nUGC / Affiliate / Organic\nFerdinand – UGC outreach, whitelisting, affiliate support\n\nPhoebe – Affiliate manager\n\nZain – Oversees affiliate and organic strategy (ties back to leadership)\n\nEngineering\nOwner: Kamal (Head of Engineering)\n\nMehakpal “MP” – Senior engineer (Ad Genius creatives)\n\nKajal – Engineer (Ad Genius creatives)\n\nVanshdeep – Engineer (funnel & CRO builds) - under Jack\n\nArshaan - recently started, backend engineer\n\nAlex – App developer - under Jack/Funnel team\n\nConversion / Funnel CRO\nOwner: Jack\n\nAndy – Head of CRO\n\nNica – Funnel specialist\n\nMary – Funnel specialist\n\nRaj – Web developer (funnels)\n\nJinali – Funnel developer\n\nYumna – Mock-up designer\n\nEmail marketing: Harris’s agency (external; interfaces via funnel team)\n\nFulfilment & Operations\nShoaib – Senior office manager (warehouse / 3PL liaison)\n\nHamza – Assistant office manager\n\nCustomer Support (5): Regine, Rana, Rosalie, Marakar, Jam\n\nG&A\nAlfred – HR & recruiting lead\n\nAccounting team – Bookkeeping (external)\n\nTax & compliance: new external tax team onboarding\n\nExternal Agencies / Vendors\nInceptly – YouTube ads agency (handles media buying only)\n\nEmail agency – Harris (primary contact)\n\nContext 6: Audience Overview\nAncient Remedies customers—largely health-conscious, skeptical of mainstream medicine, and strongly motivated by either serious chronic ailments or a desire to live more “naturally”—respond best to well-structured, easy-to-implement guides and references. Focus on condition-specific solutions, practical how-to steps, and real synergy-based remedies.\n\nDemographics & Life Stage\nAge Range: Primarily 45–75. Many are retirees or approaching retirement and want to preserve/improve health.\nGender: Both men and women, but there is a slight lean toward women (often the household caretaker or family health “researcher”).\nLocation: Predominantly the U.S., Canada, UK, Australia, and New Zealand—but with scattered international buyers (sell in 130+ countries). \nLifestyle:\nA mix of suburban, rural, and small homesteads. Many have gardens (or want to start one).\nSome are “preppers” or folks wanting self-sufficiency in uncertain times.\nOthers are simply trying to age gracefully and avoid heavy reliance on doctors.\nPsychographics & Beliefs\nStrong Distrust of Big Pharma: They feel over-prescribed or neglected by modern medicine. Many have experienced frustration with doctors pushing medications rather than root-cause solutions.\nDesire to Return to ‘Nature’s Pharmacy’: They believe real healing often comes from plants, herbs, and ancestral wisdom, not labs.\nDIY and Self-Reliant Mindset: They want practical, hands-on knowledge they can apply at home—especially if finances or healthcare availability is limited.\nFamily-Centric: A good portion want to help their spouse, children, grandchildren, or elderly parents. They see “healthy living” as a gift to pass down.\nConcerned About Aging Well: Many mention fear of mental decline (memory, dementia), joint pain, inflammation, arthritis, diabetes, heart issues, or kidney problems.\nValue High-Quality Learning Materials: Physical, easy-to-reference guides are key. They’re sick of half-baked internet info and value a trusted “one-stop-shop” resource.\n2. Biggest Pain Points and Challenges\n1) Chronic Conditions & Inflammation\nDiabetes (type 2 especially) is top of mind.\nHigh blood pressure, high cholesterol.\nAutoimmune disorders (arthritis, fibromyalgia, hypothyroidism, etc.).\nKidney disease (many at stage 3 or above, worried about dialysis).\nInflammatory issues: joint pain, gout, scleroderma, etc.\n2) Disillusionment with Conventional Medicine\nFeeling “stuck” on multiple prescriptions with side effects.\nDistrust after seeing repeated “band-aid fixes” that do not address the root cause.\nNegative experiences with doctors, hospitals, or a family member’s poor outcome.\n3) “Getting Older” Concerns\nReduced mobility, fatigue, and fear of cognitive decline.\nMenopause / hormone imbalances, hair loss, declining vitality.\nWeight gain and struggles with diets that never last.\n4) Accessibility & Ease of Use\nThey want clarity on dosages (which many herbal books fail to provide).\nStep-by-step instructions (how to brew, how to make tinctures, balms, teas).\nQuick references. They love the laminated card format, bullet points, and pictures.\n5) Financial / Budget Pressures\nMany on fixed incomes or Social Security.\nThey worry about paying for medications, so they seek cheaper and more “natural” ways.\nInternational customers are also wary of currency conversion rates and shipping costs.\n\nContext 7: Products Overview\n\n1. Ancient Remedies Revived (ARR)\nPrice / Format: $37, full-color paperback or embossed hardcover (288 pp).\n\nCore value: Big, “encyclopedia” style reference—250+ herb profiles, synergy recipes, disease index.\n\nTake-away for dev: Customers loved the depth and pretty visuals but found it heavy to use in the kitchen; asked for quicker, condition-specific guidance. ARR proved the appetite for physical, premium design.\n\n\n\n2. Recipe Cards (6-card bundle)\nPrice / Format: $29.99 laminated, wipe-clean kitchen cards.\n\n\nCore value: “Quick-grab” recipes & herb synergies for six top concerns (Memory, Heart, Blood Sugar, Kidney, Breathing, Mobility).\n\n\nDev lesson: Portability + waterproof format solved ARR’s usability pain. Positive feedback on niche-specific cards → guided us toward modular products.\n\n\n\n3. Natural Healing Handbook (NHH) – current flagship, ~90 % of revenue\nPrice / Format: $37 spiral-bound hardcover (80 pp).\n\n\nCore value: Condenses ARR wisdom into 120+ step-by-step remedies across 15 health categories; easy lay-flat design.\n\nDev lesson: Customers want actionable shortcuts over encyclopedic detail. The spiral format and recipe-first layout became our new template.\n\n4. Condition Recipe Guides (5 SKUs)\nPrice / Format: $29.99 leather-bound, 12 pp each.\n\nTopics: Joint Pain, Blood Sugar, Digestion, Brain, Heart.\n\nCore value: Ultra-condensed herb lists + 10 quick recipes per sheet for sufferers who need one focus area.\n\nDev lesson: Micro-products convert well as upsells; reinforce desire for targeted, visually appealing references.\n\nUpcoming (next 60 days)\nKids’ herbal picture book (ages 5-7)\n\n14-day Liver Detox guide\n\n“Nature’s Kitchen” stand-up flipbook (countertop recipes)\n\nFreemium AI health-advice app (MVP)\n+ more\n\nWhat this tells us about the customer journey\nPhysical-first, reference-style formats convert best (books → cards → cheat-sheets).\n\nEase & specificity trump exhaustive detail—hence the move from ARR → NHH → cheat-sheets.\n\nDesign & durability (laminated, spiral, leather) are value levers customers happily pay for.\n\nEach new SKU should either:\n\nSolve a narrower health pain in seconds or\n\nMake existing info faster to access (format innovation).\n\nContext 8: Distilled Creative Learnings\nCore Patterns in Winning Ads\nStrong Hooks Matter Most: The top-performing ads immediately call out a specific pain point (e.g., digestion, blood sugar, forgetfulness) in a natural, unscripted tone.\n\n\nRecipe-led Value: Audiences love simple, actionable recipes that appear in the book, especially when they:\n\nUse basic kitchen ingredients\n\nInclude synergy explanations or basic science/stats for credibility\n\nTie back clearly to solving a problem\n\nAuthenticity Beats Polish:\n\nFiller words (“um”, “like”) enhance relatability\n\nNeutral or calm delivery outperforms overly emotional styles\n\nSimple captioning (white/yellow, no emojis) fits low-production UGC best\n\nEffective Structure Template:\n\nProblem/Pain Point Hook\n\nPresent easy recipe/solution\n\nPersonal anecdote/testimonial\n\nShow other book contents briefly\n\nSoft but clear CTA (e.g., “It’s on sale, came in 5 days”)"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        1104,
+        -48
+      ],
+      "id": "62fca547-e6bc-480a-b7fe-ecda99d0515d",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {
+          "temperature": 0.1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1104,
+        112
+      ],
+      "id": "f5334578-1e75-4a4c-a84b-9bed3640d9c3",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "npKSRVeGjp36H8Xf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U01V34DRB1A",
+          "mode": "list",
+          "cachedResultName": "kamal.khraisheh"
+        },
+        "text": "={{ $json.text }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1392,
+        -48
+      ],
+      "id": "6342925b-917e-4560-a89e-685c1669c26f",
+      "name": "Send a message",
+      "webhookId": "666a3338-d408-4f7d-a996-9e7cea9972ef",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "lVpLDXvzVVU1zBnW",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ---- Helpers ----\nfunction ymdFromValue(v) {\n  if (!v) return '';\n  if (typeof v === 'string') return v.slice(0, 10); // \"YYYY-MM-DD\" or ISO\n  const d = new Date(v);\n  if (Number.isNaN(d.getTime())) return '';\n  const y = d.getFullYear();\n  const m = String(d.getMonth() + 1).padStart(2, '0');\n  const dd = String(d.getDate()).padStart(2, '0');\n  return `${y}-${m}-${dd}`;\n}\n\nconst now = new Date();\nconst todayStr = ymdFromValue(now);\n\n// ---- Build a flat list of rows from input ----\nconst rows = [];\nfor (const it of $input.all()) {\n  if (Array.isArray(it.json?.data)) rows.push(...it.json.data);\n  else rows.push(it.json);\n}\n\n// ---- Group rows by Call Name ----\nconst groups = rows.reduce((acc, r) => {\n  const key = (r['Call Name'] ?? r.callName ?? 'Unknown') + '';\n  (acc[key] ||= []).push(r);\n  return acc;\n}, {});\n\n// ---- Emit one item per Call Name with Today vs Old ----\nreturn Object.entries(groups).map(([name, records]) => {\n  const todayTexts = [];\n  const oldTexts = [];\n\n  for (const r of records) {\n    const summary =\n      (r['Full Summary'] ?? r.fullSummary ?? '').toString().trim();\n    if (!summary) continue;\n\n    const dateStr = ymdFromValue(r['Date'] ?? r.date ?? r['Created Time'] ?? r.createdTime);\n    const isToday = dateStr === todayStr;\n\n    if (isToday) todayTexts.push(summary);\n    else oldTexts.push(summary);\n  }\n\n  const numberedToday = todayTexts\n    .map((s, i) => `Call ${i + 1} Summary:\\n${s}`)\n    .join('\\n\\n');\n\n  const numberedOld = oldTexts\n    .map((s, i) => `Call ${i + 1} Summary:\\n${s}`)\n    .join('\\n\\n');\n\n  return {\n    json: {\n      callName: {\n        name,\n        old_summaries: numberedOld,\n        Today_Summaries: numberedToday,\n      },\n    },\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        -304
+      ],
+      "id": "91c75fc3-1925-4469-b3bc-09ca5886cc6b",
+      "name": "Creatives_Summary_List"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblvoDmQdHuJrOlmc",
+          "mode": "list",
+          "cachedResultName": "Creatives",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblvoDmQdHuJrOlmc"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        64,
+        -304
+      ],
+      "id": "24c57fdd-c7b5-4b15-8055-1718cb06dcf0",
+      "name": "Search records in Creatives Table",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblF7yv3ukfVknWGB",
+          "mode": "list",
+          "cachedResultName": "Engineering",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblF7yv3ukfVknWGB"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        64,
+        -128
+      ],
+      "id": "4109389d-d4a2-4911-8068-96fd14a7d4ab",
+      "name": "Search records in Engineering Table",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblmXeVzVxetc7GOg",
+          "mode": "list",
+          "cachedResultName": "Product",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblmXeVzVxetc7GOg"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        64,
+        64
+      ],
+      "id": "89b36869-c359-4e7c-afaf-3f2dbce8863e",
+      "name": "Search records in Product Table",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblyt4vGU3TZiid3a",
+          "mode": "list",
+          "cachedResultName": "Other",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblyt4vGU3TZiid3a"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        64,
+        240
+      ],
+      "id": "3448464a-2e19-4654-8df7-8476b9804ca8",
+      "name": "Search records in Other Table",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ---- Helpers ----\nfunction ymdFromValue(v) {\n  if (!v) return '';\n  if (typeof v === 'string') return v.slice(0, 10); // \"YYYY-MM-DD\" or ISO\n  const d = new Date(v);\n  if (Number.isNaN(d.getTime())) return '';\n  const y = d.getFullYear();\n  const m = String(d.getMonth() + 1).padStart(2, '0');\n  const dd = String(d.getDate()).padStart(2, '0');\n  return `${y}-${m}-${dd}`;\n}\n\nconst now = new Date();\nconst todayStr = ymdFromValue(now);\n\n// ---- Build a flat list of rows from input ----\nconst rows = [];\nfor (const it of $input.all()) {\n  if (Array.isArray(it.json?.data)) rows.push(...it.json.data);\n  else rows.push(it.json);\n}\n\n// ---- Group rows by Call Name ----\nconst groups = rows.reduce((acc, r) => {\n  const key = (r['Call Name'] ?? r.callName ?? 'Unknown') + '';\n  (acc[key] ||= []).push(r);\n  return acc;\n}, {});\n\n// ---- Emit one item per Call Name with Today vs Old ----\nreturn Object.entries(groups).map(([name, records]) => {\n  const todayTexts = [];\n  const oldTexts = [];\n\n  for (const r of records) {\n    const summary =\n      (r['Full Summary'] ?? r.fullSummary ?? '').toString().trim();\n    if (!summary) continue;\n\n    const dateStr = ymdFromValue(r['Date'] ?? r.date ?? r['Created Time'] ?? r.createdTime);\n    const isToday = dateStr === todayStr;\n\n    if (isToday) todayTexts.push(summary);\n    else oldTexts.push(summary);\n  }\n\n  const numberedToday = todayTexts\n    .map((s, i) => `Call ${i + 1} Summary:\\n${s}`)\n    .join('\\n\\n');\n\n  const numberedOld = oldTexts\n    .map((s, i) => `Call ${i + 1} Summary:\\n${s}`)\n    .join('\\n\\n');\n\n  return {\n    json: {\n      callName: {\n        name,\n        old_summaries: numberedOld,\n        Today_Summaries: numberedToday,\n      },\n    },\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        240
+      ],
+      "id": "ce128424-a0f7-461d-a110-6505ec92818d",
+      "name": "Other_Summary_List"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ---- Helpers ----\nfunction ymdFromValue(v) {\n  if (!v) return '';\n  if (typeof v === 'string') return v.slice(0, 10); // \"YYYY-MM-DD\" or ISO\n  const d = new Date(v);\n  if (Number.isNaN(d.getTime())) return '';\n  const y = d.getFullYear();\n  const m = String(d.getMonth() + 1).padStart(2, '0');\n  const dd = String(d.getDate()).padStart(2, '0');\n  return `${y}-${m}-${dd}`;\n}\n\nconst now = new Date();\nconst todayStr = ymdFromValue(now);\n\n// ---- Build a flat list of rows from input ----\nconst rows = [];\nfor (const it of $input.all()) {\n  if (Array.isArray(it.json?.data)) rows.push(...it.json.data);\n  else rows.push(it.json);\n}\n\n// ---- Group rows by Call Name ----\nconst groups = rows.reduce((acc, r) => {\n  const key = (r['Call Name'] ?? r.callName ?? 'Unknown') + '';\n  (acc[key] ||= []).push(r);\n  return acc;\n}, {});\n\n// ---- Emit one item per Call Name with Today vs Old ----\nreturn Object.entries(groups).map(([name, records]) => {\n  const todayTexts = [];\n  const oldTexts = [];\n\n  for (const r of records) {\n    const summary =\n      (r['Full Summary'] ?? r.fullSummary ?? '').toString().trim();\n    if (!summary) continue;\n\n    const dateStr = ymdFromValue(r['Date'] ?? r.date ?? r['Created Time'] ?? r.createdTime);\n    const isToday = dateStr === todayStr;\n\n    if (isToday) todayTexts.push(summary);\n    else oldTexts.push(summary);\n  }\n\n  const numberedToday = todayTexts\n    .map((s, i) => `Call ${i + 1} Summary:\\n${s}`)\n    .join('\\n\\n');\n\n  const numberedOld = oldTexts\n    .map((s, i) => `Call ${i + 1} Summary:\\n${s}`)\n    .join('\\n\\n');\n\n  return {\n    json: {\n      callName: {\n        name,\n        old_summaries: numberedOld,\n        Today_Summaries: numberedToday,\n      },\n    },\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        64
+      ],
+      "id": "53daa02b-f4d3-44bb-98a4-8265f38bcf49",
+      "name": "Product_Summary_List"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ---- Helpers ----\nfunction ymdFromValue(v) {\n  if (!v) return '';\n  if (typeof v === 'string') return v.slice(0, 10); // \"YYYY-MM-DD\" or ISO\n  const d = new Date(v);\n  if (Number.isNaN(d.getTime())) return '';\n  const y = d.getFullYear();\n  const m = String(d.getMonth() + 1).padStart(2, '0');\n  const dd = String(d.getDate()).padStart(2, '0');\n  return `${y}-${m}-${dd}`;\n}\n\nconst now = new Date();\nconst todayStr = ymdFromValue(now);\n\n// ---- Build a flat list of rows from input ----\nconst rows = [];\nfor (const it of $input.all()) {\n  if (Array.isArray(it.json?.data)) rows.push(...it.json.data);\n  else rows.push(it.json);\n}\n\n// ---- Group rows by Call Name ----\nconst groups = rows.reduce((acc, r) => {\n  const key = (r['Call Name'] ?? r.callName ?? 'Unknown') + '';\n  (acc[key] ||= []).push(r);\n  return acc;\n}, {});\n\n// ---- Emit one item per Call Name with Today vs Old ----\nreturn Object.entries(groups).map(([name, records]) => {\n  const todayTexts = [];\n  const oldTexts = [];\n\n  for (const r of records) {\n    const summary =\n      (r['Full Summary'] ?? r.fullSummary ?? '').toString().trim();\n    if (!summary) continue;\n\n    const dateStr = ymdFromValue(r['Date'] ?? r.date ?? r['Created Time'] ?? r.createdTime);\n    const isToday = dateStr === todayStr;\n\n    if (isToday) todayTexts.push(summary);\n    else oldTexts.push(summary);\n  }\n\n  const numberedToday = todayTexts\n    .map((s, i) => `Call ${i + 1} Summary:\\n${s}`)\n    .join('\\n\\n');\n\n  const numberedOld = oldTexts\n    .map((s, i) => `Call ${i + 1} Summary:\\n${s}`)\n    .join('\\n\\n');\n\n  return {\n    json: {\n      callName: {\n        name,\n        old_summaries: numberedOld,\n        Today_Summaries: numberedToday,\n      },\n    },\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        -128
+      ],
+      "id": "ccd7db00-9497-4da8-9972-7fdcaa425240",
+      "name": "Engineering_Summary_List"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "948c9de2-ce2e-4d38-8f42-2cb15f7fcc7c",
+              "leftValue": "={{ $json.callName.Today_Summaries }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "8821da13-e9fc-4f74-b4c4-d09983e21397",
+              "leftValue": "={{ $json.callName.Today_Summaries }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        864,
+        -32
+      ],
+      "id": "1b4e159f-57a9-4985-93ec-039daa5cb45a",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "content": "## Summaries\n### Searching and getting call summaries from Air Tables.",
+        "height": 944,
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        16,
+        -512
+      ],
+      "id": "ddf88c00-e9dd-4c31-b858-8eaeb562bab7",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Aggregation\n### Aggregating Results for further processing.",
+        "height": 944,
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        224,
+        -512
+      ],
+      "id": "6c44c9d7-f851-48e1-85be-e4760d3cd52b",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Processing Summaries\n### Categorizing Summaries by Call Names and further on Today and Old Calls.",
+        "height": 944,
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        432,
+        -512
+      ],
+      "id": "d6ffc84c-e010-4820-b8a7-0f4f38eabd6c",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Setting Up\n### Setting Up processed Fields to Run LLM Call only if Call Meeting is Done Today for Category by Call Names.",
+        "height": 448,
+        "width": 368
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        640,
+        -192
+      ],
+      "id": "daba560f-a2b1-4ec1-bd76-2e1fa86e3c25",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## LLM Call and Slack Message.\n### Calling Gemini with Business Context and processed Call Summaries to create a 1 paragraph end of day report on how things are progressing for that team",
+        "height": 448,
+        "width": 560,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1024,
+        -192
+      ],
+      "id": "6ce6b1ac-88aa-4086-b99f-cbffeb2d4669",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Trigger\n### It will be run once everyday at 10:00 PM",
+        "height": 448,
+        "width": 208,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        -208
+      ],
+      "id": "bd3b0140-f9a7-4706-9f96-b04560f7ae98",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "include": "specifiedFields",
+        "fieldsToInclude": "Call Name, Full Summary, Date",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        272,
+        704
+      ],
+      "id": "ef1ea54b-9b6b-4032-9e71-7d4891105923",
+      "name": "Aggregate4"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "include": "specifiedFields",
+        "fieldsToInclude": "Call Name, Full Summary, Date",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        272,
+        880
+      ],
+      "id": "e05ab97a-3523-4f19-9272-1f7b08627734",
+      "name": "Aggregate5"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "include": "specifiedFields",
+        "fieldsToInclude": "Call Name, Full Summary, Date",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        272,
+        1072
+      ],
+      "id": "c5662a16-fa3e-4118-9d33-0e62f8929bb3",
+      "name": "Aggregate6"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "include": "specifiedFields",
+        "fieldsToInclude": "Call Name, Full Summary, Date",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        272,
+        1248
+      ],
+      "id": "09bb7fd3-5715-4c3f-999d-b165dd119286",
+      "name": "Aggregate7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fffa1be2-8315-442a-b1f6-e6b0aeaa0874",
+              "name": "callName.name",
+              "value": "={{ $json.callName.name }}",
+              "type": "string"
+            },
+            {
+              "id": "a359de29-ddd3-4f72-9874-7461f546aa77",
+              "name": "callName.old_summaries",
+              "value": "={{ $json.callName.old_summaries }}",
+              "type": "string"
+            },
+            {
+              "id": "83336ba6-14b9-4bff-a633-441d790a6af5",
+              "name": "callName.yesterday_call_summary",
+              "value": "={{ $json.callName.yesterday_call_summary }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        704,
+        976
+      ],
+      "id": "e6eed208-2c46-47c5-9ff5-e028f5af252c",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblvoDmQdHuJrOlmc",
+          "mode": "list",
+          "cachedResultName": "Creatives",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblvoDmQdHuJrOlmc"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        64,
+        704
+      ],
+      "id": "50f92994-6898-489f-b10c-f36c2db3efbd",
+      "name": "Search records in Creatives Table1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblF7yv3ukfVknWGB",
+          "mode": "list",
+          "cachedResultName": "Engineering",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblF7yv3ukfVknWGB"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        64,
+        880
+      ],
+      "id": "87256d7a-3a6a-4ff9-9824-ffd61c8742b5",
+      "name": "Search records in Engineering Table1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblmXeVzVxetc7GOg",
+          "mode": "list",
+          "cachedResultName": "Product",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblmXeVzVxetc7GOg"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        64,
+        1072
+      ],
+      "id": "3ae3e3b0-0bfc-40a8-86b5-33f82a3b4d08",
+      "name": "Search records in Product Table1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblyt4vGU3TZiid3a",
+          "mode": "list",
+          "cachedResultName": "Other",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblyt4vGU3TZiid3a"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        64,
+        1248
+      ],
+      "id": "c683ae61-849b-41fe-8186-3734665bd444",
+      "name": "Search records in Other Table1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ---- Helpers ----\nfunction ymdFromValue(v) {\n  if (!v) return '';\n  if (typeof v === 'string') return v.slice(0, 10); // \"YYYY-MM-DD\" or ISO\n  const d = new Date(v);\n  if (Number.isNaN(d.getTime())) return '';\n  const y = d.getFullYear();\n  const m = String(d.getMonth() + 1).padStart(2, '0');\n  const dd = String(d.getDate()).padStart(2, '0');\n  return `${y}-${m}-${dd}`;\n}\n\n// Use the local yesterday date (run each morning)\nconst yesterday = new Date();\nyesterday.setDate(yesterday.getDate() - 1);\nconst yesterdayStr = ymdFromValue(yesterday);\n\n// ---- Build a flat list of rows from input ----\nconst rows = [];\nfor (const it of $input.all()) {\n  if (Array.isArray(it.json?.data)) rows.push(...it.json.data);\n  else rows.push(it.json);\n}\n\n// ---- Group rows by Call Name ----\nconst groups = rows.reduce((acc, r) => {\n  const key = (r['Call Name'] ?? r.callName ?? 'Unknown') + '';\n  (acc[key] ||= []).push(r);\n  return acc;\n}, {});\n\n// ---- Emit one item per Call Name with Yesterday vs Older ----\nreturn Object.entries(groups).map(([name, records]) => {\n  const yTexts = [];     // yesterday only\n  const oldTexts = [];   // strictly before yesterday\n\n  for (const r of records) {\n    const summary = String(r['Full Summary'] ?? r.fullSummary ?? '').trim();\n    if (!summary) continue;\n\n    const dateStr = ymdFromValue(\n      r['Date'] ?? r.date ?? r['Created Time'] ?? r.createdTime\n    );\n\n    if (dateStr === yesterdayStr) yTexts.push(summary);\n    else if (dateStr && dateStr < yesterdayStr) oldTexts.push(summary);\n  }\n\n  const numbered = (arr) =>\n    arr.map((s, i) => `Call ${i + 1} Summary:\\n${s}`).join('\\n\\n');\n\n  return {\n    json: {\n      callName: {\n        name,\n        yesterday_call_summary: numbered(yTexts),\n        old_summaries: numbered(oldTexts),\n      },\n    },\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        1248
+      ],
+      "id": "6d9c3422-8cb2-4168-b10d-01cea679a0c2",
+      "name": "Other_Summary_List1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ---- Helpers ----\nfunction ymdFromValue(v) {\n  if (!v) return '';\n  if (typeof v === 'string') return v.slice(0, 10); // \"YYYY-MM-DD\" or ISO\n  const d = new Date(v);\n  if (Number.isNaN(d.getTime())) return '';\n  const y = d.getFullYear();\n  const m = String(d.getMonth() + 1).padStart(2, '0');\n  const dd = String(d.getDate()).padStart(2, '0');\n  return `${y}-${m}-${dd}`;\n}\n\n// Use the local yesterday date (run each morning)\nconst yesterday = new Date();\nyesterday.setDate(yesterday.getDate() - 1);\nconst yesterdayStr = ymdFromValue(yesterday);\n\n// ---- Build a flat list of rows from input ----\nconst rows = [];\nfor (const it of $input.all()) {\n  if (Array.isArray(it.json?.data)) rows.push(...it.json.data);\n  else rows.push(it.json);\n}\n\n// ---- Group rows by Call Name ----\nconst groups = rows.reduce((acc, r) => {\n  const key = (r['Call Name'] ?? r.callName ?? 'Unknown') + '';\n  (acc[key] ||= []).push(r);\n  return acc;\n}, {});\n\n// ---- Emit one item per Call Name with Yesterday vs Older ----\nreturn Object.entries(groups).map(([name, records]) => {\n  const yTexts = [];     // yesterday only\n  const oldTexts = [];   // strictly before yesterday\n\n  for (const r of records) {\n    const summary = String(r['Full Summary'] ?? r.fullSummary ?? '').trim();\n    if (!summary) continue;\n\n    const dateStr = ymdFromValue(\n      r['Date'] ?? r.date ?? r['Created Time'] ?? r.createdTime\n    );\n\n    if (dateStr === yesterdayStr) yTexts.push(summary);\n    else if (dateStr && dateStr < yesterdayStr) oldTexts.push(summary);\n  }\n\n  const numbered = (arr) =>\n    arr.map((s, i) => `Call ${i + 1} Summary:\\n${s}`).join('\\n\\n');\n\n  return {\n    json: {\n      callName: {\n        name,\n        yesterday_call_summary: numbered(yTexts),\n        old_summaries: numbered(oldTexts),\n      },\n    },\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        1072
+      ],
+      "id": "3618ffdb-8b3e-418c-bbed-bb1d36f203ad",
+      "name": "Product_Summary_List1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ---- Helpers ----\nfunction ymdFromValue(v) {\n  if (!v) return '';\n  if (typeof v === 'string') return v.slice(0, 10); // \"YYYY-MM-DD\" or ISO\n  const d = new Date(v);\n  if (Number.isNaN(d.getTime())) return '';\n  const y = d.getFullYear();\n  const m = String(d.getMonth() + 1).padStart(2, '0');\n  const dd = String(d.getDate()).padStart(2, '0');\n  return `${y}-${m}-${dd}`;\n}\n\n// Use the local yesterday date (run each morning)\nconst yesterday = new Date();\nyesterday.setDate(yesterday.getDate() - 1);\nconst yesterdayStr = ymdFromValue(yesterday);\n\n// ---- Build a flat list of rows from input ----\nconst rows = [];\nfor (const it of $input.all()) {\n  if (Array.isArray(it.json?.data)) rows.push(...it.json.data);\n  else rows.push(it.json);\n}\n\n// ---- Group rows by Call Name ----\nconst groups = rows.reduce((acc, r) => {\n  const key = (r['Call Name'] ?? r.callName ?? 'Unknown') + '';\n  (acc[key] ||= []).push(r);\n  return acc;\n}, {});\n\n// ---- Emit one item per Call Name with Yesterday vs Older ----\nreturn Object.entries(groups).map(([name, records]) => {\n  const yTexts = [];     // yesterday only\n  const oldTexts = [];   // strictly before yesterday\n\n  for (const r of records) {\n    const summary = String(r['Full Summary'] ?? r.fullSummary ?? '').trim();\n    if (!summary) continue;\n\n    const dateStr = ymdFromValue(\n      r['Date'] ?? r.date ?? r['Created Time'] ?? r.createdTime\n    );\n\n    if (dateStr === yesterdayStr) yTexts.push(summary);\n    else if (dateStr && dateStr < yesterdayStr) oldTexts.push(summary);\n  }\n\n  const numbered = (arr) =>\n    arr.map((s, i) => `Call ${i + 1} Summary:\\n${s}`).join('\\n\\n');\n\n  return {\n    json: {\n      callName: {\n        name,\n        yesterday_call_summary: numbered(yTexts),\n        old_summaries: numbered(oldTexts),\n      },\n    },\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        880
+      ],
+      "id": "7dfef0c9-1a85-43f3-8ad0-7bcf842ad515",
+      "name": "Engineering_Summary_List1"
+    },
+    {
+      "parameters": {
+        "content": "## Summaries\n### Searching and getting call summaries from Air Tables.",
+        "height": 944,
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        16,
+        496
+      ],
+      "id": "ae2696b7-0974-49a8-a224-1a2a43bf64c2",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## Aggregation\n### Aggregating Results for further processing.",
+        "height": 944,
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        224,
+        496
+      ],
+      "id": "7df01aec-c405-4843-a864-9220870378f1",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## Processing Summaries\n### Categorizing Summaries by Call Names and further on Yesterday and Old Calls.",
+        "height": 944,
+        "width": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        432,
+        496
+      ],
+      "id": "4656660f-d4a5-4e8f-8430-a67eb8b057a7",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "## Setting Up\n### Setting Up processed Fields and loading yesterday To do list for specific call Name, and then structuring them for an LLM call.",
+        "height": 480,
+        "width": 960
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        656,
+        768
+      ],
+      "id": "7bd189bc-0b3c-4914-bfc2-363589ec5780",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblciB06vAlLYW8K4",
+          "mode": "list",
+          "cachedResultName": "To Do List (Others)",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblciB06vAlLYW8K4"
+        },
+        "filterByFormula": "=AND(\n  LOWER(TRIM({Call Name})) = LOWER(TRIM(\"{{$json.callName.name}}\")),\n  IS_SAME({Date}, DATEADD(TODAY(), -1, 'day'), 'day')\n)\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        896,
+        1072
+      ],
+      "id": "b43bd7bb-5a26-4f28-afa6-a721bab0726b",
+      "name": "Search records To do (Others)",
+      "alwaysOutputData": false,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblwjzhqI91KdQzSK",
+          "mode": "list",
+          "cachedResultName": "To DO List (Me)",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tblwjzhqI91KdQzSK"
+        },
+        "filterByFormula": "=AND(\n  LOWER(TRIM({Call Name})) = LOWER(TRIM(\"{{$json.callName.name}}\")),\n  IS_SAME({Date}, DATEADD(TODAY(), -1, 'day'), 'day')\n)\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        896,
+        880
+      ],
+      "id": "85b414c4-706a-4a35-8b54-a38b36eec133",
+      "name": "Search records To do (Me)",
+      "alwaysOutputData": false,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ---- Helpers ----\nfunction ymdFromValue(v) {\n  if (!v) return '';\n  if (typeof v === 'string') return v.slice(0, 10); // \"YYYY-MM-DD\" or ISO\n  const d = new Date(v);\n  if (Number.isNaN(d.getTime())) return '';\n  const y = d.getFullYear();\n  const m = String(d.getMonth() + 1).padStart(2, '0');\n  const dd = String(d.getDate()).padStart(2, '0');\n  return `${y}-${m}-${dd}`;\n}\n\n// Use the local yesterday date (run each morning)\nconst yesterday = new Date();\nyesterday.setDate(yesterday.getDate() - 1);\nconst yesterdayStr = ymdFromValue(yesterday);\n\n// ---- Build a flat list of rows from input ----\nconst rows = [];\nfor (const it of $input.all()) {\n  if (Array.isArray(it.json?.data)) rows.push(...it.json.data);\n  else rows.push(it.json);\n}\n\n// ---- Group rows by Call Name ----\nconst groups = rows.reduce((acc, r) => {\n  const key = (r['Call Name'] ?? r.callName ?? 'Unknown') + '';\n  (acc[key] ||= []).push(r);\n  return acc;\n}, {});\n\n// ---- Emit one item per Call Name with Yesterday vs Older ----\nreturn Object.entries(groups).map(([name, records]) => {\n  const yTexts = [];     // yesterday only\n  const oldTexts = [];   // strictly before yesterday\n\n  for (const r of records) {\n    const summary = String(r['Full Summary'] ?? r.fullSummary ?? '').trim();\n    if (!summary) continue;\n\n    const dateStr = ymdFromValue(\n      r['Date'] ?? r.date ?? r['Created Time'] ?? r.createdTime\n    );\n\n    if (dateStr === yesterdayStr) yTexts.push(summary);\n    else if (dateStr && dateStr < yesterdayStr) oldTexts.push(summary);\n  }\n\n  const numbered = (arr) =>\n    arr.map((s, i) => `Call ${i + 1} Summary:\\n${s}`).join('\\n\\n');\n\n  return {\n    json: {\n      callName: {\n        name,\n        yesterday_call_summary: numbered(yTexts),\n        old_summaries: numbered(oldTexts),\n      },\n    },\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        704
+      ],
+      "id": "45cf2adb-95c4-481a-83b7-326c8d23d7dd",
+      "name": "Creatives_Summary_List2"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "include": "specifiedFields",
+        "fieldsToInclude": "Call Name, Call Link, Description, Status, Priority",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        880
+      ],
+      "id": "8d844e47-4d29-4803-bba2-0a51de3f0850",
+      "name": "Aggregate8"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "include": "specifiedFields",
+        "fieldsToInclude": "Call Name, Call Link, Description, Status, Priority",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        1072
+      ],
+      "id": "7ec0909f-750d-48f8-814d-cdeead8d59cd",
+      "name": "Aggregate9"
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- helpers ---\nconst norm = (s) => String(s ?? '').trim().toLowerCase();\n\n// read base/meta from Edit Fields1 and index by name\nconst baseItems = ($items('Edit Fields1', 0) || []).map(it => it.json?.callName || {});\nconst baseByName = new Map(baseItems.map(b => [norm(b.name), b]));\n\n// flatten rows coming out of an Aggregate node\nfunction rowsFrom(nodeName) {\n  const out = [];\n  for (const it of ($items(nodeName, 0) || [])) {\n    const d = it.json?.data ?? it.json;\n    if (!d) continue;\n    if (Array.isArray(d)) out.push(...d);\n    else out.push(d);\n  }\n  return out;\n}\n\nconst meRows = rowsFrom('Aggregate8');     // To Do List (Me)\nconst otherRows = rowsFrom('Aggregate9');  // To Do List (Others)\n\n// internal store by call name\nconst store = new Map();\n\nfunction ensure(name) {\n  if (!store.has(name)) {\n    const base = baseByName.get(norm(name)) || {};\n    store.set(name, {\n      me: [],           // internal only\n      other: [],        // internal only\n      meta: {\n        name,\n        old_summaries: String(base.old_summaries ?? ''),\n        yesterday_call_summary: String(\n          base.yesterday_call_summary ?? base.Today_Summaries ?? base.today_summaries ?? ''\n        ),\n      },\n    });\n  }\n  return store.get(name);\n}\n\nfunction addRows(rows, bucketKey) {\n  for (const r of rows) {\n    const nameRaw = r['Call Name'] ?? r.callName ?? '';\n    const name = String(nameRaw).trim();\n    if (!name) continue;\n\n    const entry = ensure(name);\n    entry[bucketKey].push({\n      description: String(r['Description'] ?? '').trim(),\n      status: String(r['Status'] ?? '').trim(),\n      priority: String(r['Priority'] ?? '').trim(),\n      call_link: String(r['Call Link'] ?? r.callLink ?? '').trim(),\n    });\n  }\n}\n\naddRows(meRows, 'me');\naddRows(otherRows, 'other');\n\n// build readable text blocks for LLM consumption\nfunction toText(list) {\n  return list.map((t, i) => {\n    let line = `To Do ${i + 1}: ${t.description || '(no description)'}`;\n    const meta = [];\n    if (t.status) meta.push(`Status: ${t.status}`);\n    if (t.priority) meta.push(`Priority: ${t.priority}`);\n    if (t.call_link) meta.push(`Link: ${t.call_link}`);\n    if (meta.length) line += ` (${meta.join(', ')})`;\n    return line;\n  }).join('\\n\\n');\n}\n\n// emit one item per Call Name (no arrays in output)\nconst out = [];\nfor (const { meta, me, other } of store.values()) {\n  out.push({\n    json: {\n      callName: {\n        name: meta.name,\n        old_summaries: meta.old_summaries,\n        yesterday_call_summary: meta.yesterday_call_summary,\n        me_todos_text: toText(me),\n        other_todos_text: toText(other),\n      },\n    },\n  });\n}\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1408,
+        976
+      ],
+      "id": "a7cf0e9d-dce7-4599-945d-fd03a4e3c044",
+      "name": "Code"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1248,
+        976
+      ],
+      "id": "adff8dff-9761-4e36-99cf-b3cae2a6fc73",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Inputs\n\nCall Name: {{ $json.callName.name }}\n\nYesterday’s Call Summaries (flat text): {{ $json.callName.yesterday_call_summary }}\n\nOlder Call Summaries (flat text): {{ $json.callName.old_summaries }}\n\nTo-Dos (Me): {{ $json.callName.me_todos_text }}\n\nTo-Dos (Others): {{ $json.callName.other_todos_text }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are a crisp, executive assistant generating Slack-ready daily call agendas.\n\nInputs\n\nBusiness Context: This is given at the end.\n\nCall Name:\n\nYesterday’s Call Summaries (flat text): \n\nOlder Call Summaries (flat text): \n\nTo-Dos (Me): \n\nTo-Dos (Others): \n\nGoal\nAt the start of each day, produce a tight, bullet-point agenda for this call that tells me:\n\nwhat to check in on,\n\nwhat I need to do before or during the call,\n\nwhat’s blocked, and\n\nwhat decisions or data we need.\n\nHow to think\n\nRead Yesterday vs Older summaries to spot deltas, open loops, and trends.\n\nParse the To-Dos (Me/Others) into action items and check-ins.\n\nUse the Business Context to keep wording, priorities, and acronyms on-brand (e.g., ARR, NHH, CRO, UGC). Do not invent facts.\n\nOutput rules\n\nOne message per call. No code fences. No YAML. Slack-friendly Markdown only.\n\nKeep it concise (≤ ~12 bullets or ~1,200 characters). Deduplicate similar items.\n\nIf a section has no content, omit the header.\n\nConvert vague items into a specific next step when possible; otherwise add “(confirm)”.\n\nPull any links found in inputs into the Links section.\n\nNever include the raw inputs or your reasoning.\n\nMessage format (exactly this structure)\nDaily Call Agenda\n\nTop Priorities\n\n…\n\n…\n\nQuick Recap (Yesterday)\n\n…\n\nOpen Loops / From Earlier\n\n…\n\nMy Pre-Call Tasks\n\n …\n\n …\n\nCheck-ins for the Team\n\n… (Owner/Area)\n\n…\n\nRisks / Blockers\n\n… ➜ propose next step: …\n\nDecision Requests\n\n…\n\nLinks\n\n…\n\nQuality checks before you finish\n\nAre the top priorities truly today-critical?\n\nAre all tasks phrased as verbs with clear outcomes?\n\nDid you remove duplicates and filler?\n\nIs the tone direct, calm, and action-oriented?\n\nIf there is no meaningful input for a section, omit it and still ship a useful agenda.\n\n\nBusiness Context:\nContext 4: Business Overview\nAncient Remedies is a direct response e-commerce brand that produces natural health books and guides, primarily targeting the 40+ market. Our products focus on helping people get healthier at home using everyday ingredients—teaching simple, natural approaches to self-care and wellness without relying on anything special or exotic. We acquire approximately 30,000 new customers each month, with sales split roughly 50/50 between the U.S. and international markets, with 85% of sales coming from the Big 5 (US, UK, CA, AU, NZ). Our advertising is primarily through Facebook and YouTube, using video ads that lead to an advertorial, followed by a sales page, checkout, and post-purchase upsells. While we initially relied on 30-minute video sales letters, we’ve since shifted toward short-form video content, including shorter VSLs and video shorts, which now drive the bulk of our performance.\nGeneral Shipping Info:\nFor US/UK/AU/CA - ships from local warehouse in 3-5 business days\nRest of world - 7-10 days\nTracked and insured shipping\n60 day money back guarantee on all products.\n\n\nOur Vision:\nOur vision is to create the world’s most accessible, scientifically backed, beautifully designed, and easy-to-use natural health products—empowering people everywhere to take charge of their well-being from the comfort of their own homes. We believe that true health doesn’t require expensive treatments or exotic ingredients; it begins with knowledge, intention, and the simple things already in your kitchen. By making timeless wisdom practical and actionable, we aim to become a global force for good—improving lives at scale through: better health, more vitality, and greater self-reliance for millions around the world.\n\nContext 5: Org Chart \n(rev 13 July 2025)\nRemote-first, Texas-registered (LLC ➜ S-Corp). Team hubs: Philippines (70%), rest distributed primarily across Asia, with a few in Europe\n~47 full time contractors as of Aug 22\n\n\n\nPartners / Leadership\nKamal – Co-founder & CEO\n\n • Owns product development, creatives, engineering, overall vision\n\n\nJack – Partner (joined Feb 2023)\n\n • Owns conversion/CRO and physical supply chain\n\n\nZain – Co-founder\n\n • Owns operations, channel expansion, affiliate & organic programs\n\n\n\nProduct Development \nOwner: Kamal\n\n\nMarj – Project coordination / acting product lead\n\n\nHannah – Content & concept lead (new ideas, recipe R&D)\n\n\nPau – Lead product designer\n\n\n\nCreative & Media\nRay (Rayhan) – Senior creative strategist\n\n\nFaycel – Creative strategist (strong performer)\n\n\nAntoinette – VSL specialist\n\n\nMac – Junior media buyer (internal up-skill)\nKatherine – Junior copywriter (test phase)\nAlan – Senior media-buyer \nSalman - Junior creative strategist\n\n\nShanon – Authority-figure content creator (face of brand in media)\nVideo Editing\nShaina – Lead video editor\n\n • Team: 8/9 video editors under Shai\n\n\nUGC / Affiliate / Organic\nFerdinand – UGC outreach, whitelisting, affiliate support\n\n\nPhoebe – Affiliate manager\n\n\nZain – Oversees affiliate and organic strategy (ties back to leadership)\n\n\n\nEngineering\nOwner: Kamal (Head of Engineering)\n\n\nMehakpal “MP” – Senior engineer (Ad Genius creatives)\n\n\nKajal – Engineer (Ad Genius creatives)\n\n\nVanshdeep – Engineer (funnel & CRO builds) - under Jack\n\n\nArshaan - recently started, backend engineer\n\n\nAlex – App developer - under Jack/Funnel team\n\n\n\nConversion / Funnel CRO\nOwner: Jack\n\n\nAndy – Head of CRO\n\n\nNica – Funnel specialist\n\n\nMary – Funnel specialist\n\n\nRaj – Web developer (funnels)\n\n\nJinali – Funnel developer\n\n\nYumna – Mock-up designer\n\n\nEmail marketing: Harris’s agency (external; interfaces via funnel team)\n\n\n\nFulfilment & Operations\nShoaib – Senior office manager (warehouse / 3PL liaison)\n\n\nHamza – Assistant office manager\n\n\nCustomer Support (5): Regine, Rana, Rosalie, Marakar, Jam\n\n\n\nG&A\nAlfred – HR & recruiting lead\n\n\nAccounting team – Bookkeeping (external)\n\n\nTax & compliance: new external tax team onboarding\n\n\n\nExternal Agencies / Vendors\nInceptly – YouTube ads agency (handles media buying only)\n\n\nEmail agency – Harris (primary contact)\n\n\n\n\n\nContext 6: Audience Overview\nAncient Remedies customers—largely health-conscious, skeptical of mainstream medicine, and strongly motivated by either serious chronic ailments or a desire to live more “naturally”—respond best to well-structured, easy-to-implement guides and references. Focus on condition-specific solutions, practical how-to steps, and real synergy-based remedies.\n\nDemographics & Life Stage\nAge Range: Primarily 45–75. Many are retirees or approaching retirement and want to preserve/improve health.\nGender: Both men and women, but there is a slight lean toward women (often the household caretaker or family health “researcher”).\nLocation: Predominantly the U.S., Canada, UK, Australia, and New Zealand—but with scattered international buyers (sell in 130+ countries). \nLifestyle:\nA mix of suburban, rural, and small homesteads. Many have gardens (or want to start one).\nSome are “preppers” or folks wanting self-sufficiency in uncertain times.\nOthers are simply trying to age gracefully and avoid heavy reliance on doctors.\nPsychographics & Beliefs\nStrong Distrust of Big Pharma: They feel over-prescribed or neglected by modern medicine. Many have experienced frustration with doctors pushing medications rather than root-cause solutions.\nDesire to Return to ‘Nature’s Pharmacy’: They believe real healing often comes from plants, herbs, and ancestral wisdom, not labs.\nDIY and Self-Reliant Mindset: They want practical, hands-on knowledge they can apply at home—especially if finances or healthcare availability is limited.\nFamily-Centric: A good portion want to help their spouse, children, grandchildren, or elderly parents. They see “healthy living” as a gift to pass down.\nConcerned About Aging Well: Many mention fear of mental decline (memory, dementia), joint pain, inflammation, arthritis, diabetes, heart issues, or kidney problems.\nValue High-Quality Learning Materials: Physical, easy-to-reference guides are key. They’re sick of half-baked internet info and value a trusted “one-stop-shop” resource.\n2. Biggest Pain Points and Challenges\n1) Chronic Conditions & Inflammation\nDiabetes (type 2 especially) is top of mind.\nHigh blood pressure, high cholesterol.\nAutoimmune disorders (arthritis, fibromyalgia, hypothyroidism, etc.).\nKidney disease (many at stage 3 or above, worried about dialysis).\nInflammatory issues: joint pain, gout, scleroderma, etc.\n2) Disillusionment with Conventional Medicine\nFeeling “stuck” on multiple prescriptions with side effects.\nDistrust after seeing repeated “band-aid fixes” that do not address the root cause.\nNegative experiences with doctors, hospitals, or a family member’s poor outcome.\n3) “Getting Older” Concerns\nReduced mobility, fatigue, and fear of cognitive decline.\nMenopause / hormone imbalances, hair loss, declining vitality.\nWeight gain and struggles with diets that never last.\n4) Accessibility & Ease of Use\nThey want clarity on dosages (which many herbal books fail to provide).\nStep-by-step instructions (how to brew, how to make tinctures, balms, teas).\nQuick references. They love the laminated card format, bullet points, and pictures.\n5) Financial / Budget Pressures\nMany on fixed incomes or Social Security.\nThey worry about paying for medications, so they seek cheaper and more “natural” ways.\nInternational customers are also wary of currency conversion rates and shipping costs.\n\nContext 7: Products Overview\n\n1. Ancient Remedies Revived (ARR)\nPrice / Format: $37, full-color paperback or embossed hardcover (288 pp).\n\n\nCore value: Big, “encyclopedia” style reference—250+ herb profiles, synergy recipes, disease index.\n\n\nTake-away for dev: Customers loved the depth and pretty visuals but found it heavy to use in the kitchen; asked for quicker, condition-specific guidance. ARR proved the appetite for physical, premium design.\n\n\n\n2. Recipe Cards (6-card bundle)\nPrice / Format: $29.99 laminated, wipe-clean kitchen cards.\n\n\nCore value: “Quick-grab” recipes & herb synergies for six top concerns (Memory, Heart, Blood Sugar, Kidney, Breathing, Mobility).\n\n\nDev lesson: Portability + waterproof format solved ARR’s usability pain. Positive feedback on niche-specific cards → guided us toward modular products.\n\n\n\n3. Natural Healing Handbook (NHH) – current flagship, ~90 % of revenue\nPrice / Format: $37 spiral-bound hardcover (80 pp).\n\n\nCore value: Condenses ARR wisdom into 120+ step-by-step remedies across 15 health categories; easy lay-flat design.\n\n\nDev lesson: Customers want actionable shortcuts over encyclopedic detail. The spiral format and recipe-first layout became our new template.\n\n\n\n4. Condition Recipe Guides (5 SKUs)\nPrice / Format: $29.99 leather-bound, 12 pp each.\n\n\nTopics: Joint Pain, Blood Sugar, Digestion, Brain, Heart.\n\n\nCore value: Ultra-condensed herb lists + 10 quick recipes per sheet for sufferers who need one focus area.\n\n\nDev lesson: Micro-products convert well as upsells; reinforce desire for targeted, visually appealing references.\n\n\n\nUpcoming (next 60 days)\nKids’ herbal picture book (ages 5-7)\n\n\n14-day Liver Detox guide\n\n\n“Nature’s Kitchen” stand-up flipbook (countertop recipes)\n\n\nFreemium AI health-advice app (MVP)\n+ more\n\n\n\nWhat this tells us about the customer journey\nPhysical-first, reference-style formats convert best (books → cards → cheat-sheets).\n\n\nEase & specificity trump exhaustive detail—hence the move from ARR → NHH → cheat-sheets.\n\n\nDesign & durability (laminated, spiral, leather) are value levers customers happily pay for.\n\n\nEach new SKU should either:\n\n\nSolve a narrower health pain in seconds or\n\n\nMake existing info faster to access (format innovation).\n\n\nContext 8: Distilled Creative Learnings\nCore Patterns in Winning Ads\nStrong Hooks Matter Most: The top-performing ads immediately call out a specific pain point (e.g., digestion, blood sugar, forgetfulness) in a natural, unscripted tone.\n\n\nRecipe-led Value: Audiences love simple, actionable recipes that appear in the book, especially when they:\n\n\nUse basic kitchen ingredients\n\n\nInclude synergy explanations or basic science/stats for credibility\n\n\nTie back clearly to solving a problem\n\n\nAuthenticity Beats Polish:\n\n\nFiller words (“um”, “like”) enhance relatability\n\n\nNeutral or calm delivery outperforms overly emotional styles\n\n\nSimple captioning (white/yellow, no emojis) fits low-production UGC best\n\n\nEffective Structure Template:\n\n\nProblem/Pain Point Hook\n\n\nPresent easy recipe/solution\n\n\nPersonal anecdote/testimonial\n\n\nShow other book contents briefly\n\n\nSoft but clear CTA (e.g., “It’s on sale, came in 5 days”)\n"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        1712,
+        976
+      ],
+      "id": "87511ef5-e738-44b8-8b07-1e2a0473c355",
+      "name": "Basic LLM Chain1"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1712,
+        1104
+      ],
+      "id": "ffc30b85-815e-4761-b7cf-635d0713ebca",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "npKSRVeGjp36H8Xf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U01V34DRB1A",
+          "mode": "list",
+          "cachedResultName": "kamal.khraisheh"
+        },
+        "text": "={{ $json.text }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2000,
+        976
+      ],
+      "id": "909e0da0-28cc-49a3-b6ef-73fcb5853ae0",
+      "name": "Send a message1",
+      "webhookId": "666a3338-d408-4f7d-a996-9e7cea9972ef",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "lVpLDXvzVVU1zBnW",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## LLM Call and Slack Message.\n### Calling Gemini with Business Context and processed Call Summaries to create a 1 paragraph slack, Start of each day creates a bullet point agenda for that call.",
+        "height": 480,
+        "width": 560,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1632,
+        768
+      ],
+      "id": "f680c003-27f6-452b-9f52-b4d26b64e938",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "## Start of each day\n### Pre Call Agenda",
+        "height": 976,
+        "width": 2464,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        480
+      ],
+      "id": "7f0ce9b2-3797-412d-9a40-a92c3b7fb805",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "content": "## End of each day\n### Post Call Summary",
+        "height": 976,
+        "width": 1856,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        -512
+      ],
+      "id": "fcdc122a-7fa3-47a2-a9dd-dc51eda3935c",
+      "name": "Sticky Note12"
+    },
+    {
+      "parameters": {
+        "content": "## Trigger\n### It will be run once everyday at 8:00 AM",
+        "height": 448,
+        "width": 208,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        800
+      ],
+      "id": "3f215cbe-e358-4711-a351-58f373df76bb",
+      "name": "Sticky Note13"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -176,
+        976
+      ],
+      "id": "d6044e53-be37-48cb-b10b-41958dd9ac87",
+      "name": "Scheduled Morning Trigger"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 22
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -160,
+        -32
+      ],
+      "id": "28b3a334-8063-4b9e-b7ba-7985cd398cc1",
+      "name": "Scheduled End Day Trigger"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Slack Trigger').item }}",
+        "options": {
+          "systemMessage": "=Your Name is Luna, a helpfull assistant for giving answer to user from the tables, use tool \"Search records in Airtable\" for searching and tables names are given below only use these names.\n\ntables:\n\"Engineering\", \"Creatives\", \"Product\", \"Other\", \"To DO List (Me)\", \"To Do List (Others)\"\n\nkeep the answers short and specific."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -16,
+        1664
+      ],
+      "id": "f4b0e98c-d419-4b4e-a444-3e82b294597e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        1920
+      ],
+      "id": "bc8c90f1-39b7-4fdf-a440-1b8173dc291b",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "npKSRVeGjp36H8Xf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        1920
+      ],
+      "id": "96cf7319-aea8-4706-b74b-31bedf168e2e",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Table', `use the tables names that given in the system prompt for searching through specific table.`, 'string') }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        240,
+        1920
+      ],
+      "id": "add153ee-4aa8-4601-a1b8-8c9cebabfcbc",
+      "name": "Search records in Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -224,
+        1584
+      ],
+      "id": "cfc00c42-b63d-43b7-a9e7-d8655f3da981",
+      "name": "When chat message received",
+      "webhookId": "5299c649-c612-4681-b7c5-91bb52d3c5a0"
+    },
+    {
+      "parameters": {
+        "content": "## Slack Agent\n### Ask questions about to dos etc, also mention table name ",
+        "height": 592,
+        "width": 784,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        1488
+      ],
+      "id": "382e61c8-32bf-4d2d-90ae-85c1c3141fca",
+      "name": "Sticky Note14"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U01V34DRB1A",
+          "mode": "list",
+          "cachedResultName": "kamal.khraisheh"
+        },
+        "text": "={{ $('AI Agent').item }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        336,
+        1664
+      ],
+      "id": "5f2fd892-dc49-4ddb-8787-e1f4bc1030be",
+      "name": "Send a message2",
+      "webhookId": "ed5be71b-c647-44b8-9df4-c657c6ad107c",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "CYDHynr33HWqkmRm",
+          "name": "Slack account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "trigger": [
+          "app_mention"
+        ],
+        "channelId": {
+          "__rl": true,
+          "value": "C09G91L80CQ",
+          "mode": "list",
+          "cachedResultName": "bublishing-agent"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.slackTrigger",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        1760
+      ],
+      "id": "cbc36f3f-304d-4600-ac5c-fa8f6057c2f3",
+      "name": "Slack Trigger",
+      "webhookId": "b52c764f-aa10-47ff-8a0c-9d7c08fd5aaa",
+      "credentials": {
+        "slackApi": {
+          "id": "PMpITCycEz3xbaBV",
+          "name": "Slack account 3"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Creatives_Summary_List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "Engineering_Summary_List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate2": {
+      "main": [
+        [
+          {
+            "node": "Product_Summary_List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate3": {
+      "main": [
+        [
+          {
+            "node": "Other_Summary_List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Creatives_Summary_List": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Creatives Table": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Engineering Table": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Product Table": {
+      "main": [
+        [
+          {
+            "node": "Aggregate2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Other Table": {
+      "main": [
+        [
+          {
+            "node": "Aggregate3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Other_Summary_List": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Product_Summary_List": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Engineering_Summary_List": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate4": {
+      "main": [
+        [
+          {
+            "node": "Creatives_Summary_List2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate5": {
+      "main": [
+        [
+          {
+            "node": "Engineering_Summary_List1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate6": {
+      "main": [
+        [
+          {
+            "node": "Product_Summary_List1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate7": {
+      "main": [
+        [
+          {
+            "node": "Other_Summary_List1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Search records To do (Me)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Search records To do (Others)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Creatives Table1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Engineering Table1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Product Table1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Other Table1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Other_Summary_List1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Product_Summary_List1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Engineering_Summary_List1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Creatives_Summary_List2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records To do (Me)": {
+      "main": [
+        [
+          {
+            "node": "Aggregate8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records To do (Others)": {
+      "main": [
+        [
+          {
+            "node": "Aggregate9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate8": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate9": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain1": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scheduled Morning Trigger": {
+      "main": [
+        [
+          {
+            "node": "Search records in Creatives Table1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Search records in Engineering Table1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Search records in Product Table1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Search records in Other Table1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scheduled End Day Trigger": {
+      "main": [
+        [
+          {
+            "node": "Search records in Creatives Table",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Search records in Engineering Table",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Search records in Product Table",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Search records in Other Table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Airtable": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "2c02131c-a5d0-4eb4-8ad1-735f1eb2b71f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d8261ad00fdf12d22c26fe1d7052f1dc7e37753f7ae4a5f6f52933422938b8f5"
+  },
+  "id": "W57lJSG6TCtxLS7O",
+  "tags": []
+}

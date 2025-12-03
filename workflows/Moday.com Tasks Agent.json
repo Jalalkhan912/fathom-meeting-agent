@@ -1,0 +1,979 @@
+{
+  "name": "Moday.com Tasks Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "List"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        48
+      ],
+      "id": "912d1265-908b-4ba8-9179-b5d5d5504fef",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "operation": "getAll",
+        "boardId": "2137415769",
+        "groupId": "topics",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.mondayComTool",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        -96
+      ],
+      "id": "479718b7-c3a6-4d07-bfea-10d6641fa7d7",
+      "name": "Get many items in Monday.com",
+      "credentials": {
+        "mondayComApi": {
+          "id": "Gvv16mDLf05X1c1z",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Create an item in a board's group in Monday.com, for Name use Task description.",
+        "resource": "boardItem",
+        "boardId": "2137415769",
+        "groupId": "topics",
+        "name": "={{ $fromAI(\"Name\") }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.mondayComTool",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        -96
+      ],
+      "id": "51613ea3-490f-4809-8ce1-67fa2c4e2136",
+      "name": "Create an item in a board's group in Monday.com",
+      "credentials": {
+        "mondayComApi": {
+          "id": "Gvv16mDLf05X1c1z",
+          "name": "Monday.com account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "description": "use this tool for changing moday.com item Status",
+        "workflowId": {
+          "__rl": true,
+          "value": "S9qHh7k5hz7T7iN5",
+          "mode": "list",
+          "cachedResultName": "Monday.com column change Status"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Item ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item_ID', `use item id here`, 'string') }}",
+            "Value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', `e.g. {\"label\":\"Done\"}\n`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Value",
+              "displayName": "Value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1568,
+        -96
+      ],
+      "id": "f3da4664-fb9c-46b5-b40a-64f4377d0601",
+      "name": "Change a column value for a board item in Monday.com"
+    },
+    {
+      "parameters": {
+        "description": "use this tool for changing moday.com item Person",
+        "workflowId": {
+          "__rl": true,
+          "value": "5wHufOIGsv1ffVc1",
+          "mode": "list",
+          "cachedResultName": "Monday.com column change Person"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Item ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item_ID', `use item id here`, 'string') }}",
+            "Value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', `e.g. {\"personsAndTeams\":[{ \"id\": \"82576859\", \"kind\":\"person\" }]}\n\nhere change the id the actual person ID.`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "Value",
+              "displayName": "Value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1744,
+        -96
+      ],
+      "id": "b1fd4d44-05eb-4e46-b7b0-565a71b1fcd9",
+      "name": "Monday.com column change Person"
+    },
+    {
+      "parameters": {
+        "description": "use this tool for changing moday.com item Date",
+        "workflowId": {
+          "__rl": true,
+          "value": "VNmWwyf64LV2ce7E",
+          "mode": "list",
+          "cachedResultName": "Monday.com column change Date"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Item ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item_ID', `use item id here`, 'string') }}",
+            "Value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', `e.g. {\"date\":\"2025-09-11\"}`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "Value",
+              "displayName": "Value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1920,
+        -96
+      ],
+      "id": "67acffd1-34fe-4cd1-af0c-ee2a1f641635",
+      "name": "Monday.com column change Date"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "088f4982-c166-4c74-8b49-4ce99ba344c2",
+              "name": "List",
+              "value": "={{ $json.List }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        48
+      ],
+      "id": "a177c77e-d7a9-49ff-ba42-ee4745efe4df",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code node (JavaScript)\n\nfunction toArray(val) {\n  if (val == null) return [];\n  if (Array.isArray(val)) return val;\n  if (typeof val === 'string') {\n    try { return JSON.parse(val); } catch { return []; }\n  }\n  return [];\n}\n\nfunction mergeRow(row) {\n  // Row example: [{ \"task description\": \"...\" }, {\"update text\": \"\"}, {\"status\": \"\"}, {\"Person Name\": \"Me\"}]\n  const merged = {};\n  if (Array.isArray(row)) {\n    for (const piece of row) {\n      if (piece && typeof piece === 'object') {\n        for (const [k, v] of Object.entries(piece)) merged[k] = v;\n      }\n    }\n  } else if (row && typeof row === 'object') {\n    Object.assign(merged, row);\n  }\n  return merged;\n}\n\nfunction normalizeKeys(obj) {\n  const out = {};\n  for (const [k, v] of Object.entries(obj)) {\n    const nk = k\n      .toLowerCase()\n      .replace(/\\s+|-/g, '_')\n      .replace(/[^\\w]/g, '')\n      .replace(/__+/g, '_')\n      .replace(/^_+|_+$/g, '');\n    if (nk) out[nk] = v;\n  }\n  return out;\n}\n\nconst out = [];\n\nfor (let i = 0; i < items.length; i++) {\n  const src = items[i].json || {};\n  const raw = src.List ?? src.list ?? src.LIST;\n  const rows = toArray(raw);\n\n  if (!rows.length) {\n    // Fallback: still return a single item with only the requested keys\n    out.push({\n      json: {\n        task_description: '',\n        update_text: '',\n        status: '',\n        person_name: '',\n      },\n      pairedItem: { item: i },\n    });\n    continue;\n  }\n\n  rows.forEach((row, rowIndex) => {\n    const merged = mergeRow(row);\n    const n = normalizeKeys(merged);\n\n    // Emit ONLY these four fields\n    out.push({\n      json: {\n        task_description: n.task_description ?? '',\n        update_text: n.update_text ?? '',\n        status: n.status ?? '',\n        person_name: n.person_name ?? '',\n      },\n      pairedItem: { item: i },\n    });\n  });\n}\n\nreturn out;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        48
+      ],
+      "id": "99107e82-2108-48fa-bf51-5fc0e7a97ccf",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=User query:\ntask description: {{ $json.task_description }}\n\nupdate text: {{ $json.update_text }}\n\nstatus: {{ $json.status }}\n\nperson Name: \"Kamal K\"",
+        "options": {
+          "systemMessage": "=The user input will be \"task description\", \"update text\", \"status\", \"Person Name\" to add.\n\nyour tasks are the following:\n1. first load all the items by using this tool \"Get many items in Monday.com\", this will contain many fields and its id use the specific id to add update.\n\n2. Use this \"Update Status (Me)\" tool to add an update to monday.com group item.\n\n3. use this \"Change a column value for a board item in Monday.com\" tool to add or update status. use the status from the list accordingly. if empty DO NOTHING.\n - Working on it\n - Done\n - Stuck\n\n4. use this \"Monday.com column change Person\" tool to assign person to the task. before assigning Person to task you will need its id so use this \"Search records in Airtable\" tool to first search for his id and then use that id to add Person.\n\n5. use this \"Monday.com column change Date\" tool to assign the given date: {{ $now.plus(5, 'days').format('yyyy-MM-dd') }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        976,
+        -336
+      ],
+      "id": "5c931b7d-bcc3-423a-b9c1-90550ae6fa00",
+      "name": "To Do Agent (Me)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "cefe8b49-9dc2-42dc-a883-232c94e034e5",
+              "leftValue": "={{ $json.person_name }}",
+              "rightValue": "Me",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        624,
+        48
+      ],
+      "id": "5123cdee-8083-4892-8d44-936bd2c6730c",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        896,
+        448
+      ],
+      "id": "b940ecf9-cfc0-4651-b543-52232b8322c1",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "npKSRVeGjp36H8Xf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "operation": "getAll",
+        "boardId": "2137415769",
+        "groupId": "group_title",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.mondayComTool",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        448
+      ],
+      "id": "bfc962d3-7de3-4ed3-a5ce-0a9cace4f568",
+      "name": "Get many items in Monday.com1",
+      "credentials": {
+        "mondayComApi": {
+          "id": "Gvv16mDLf05X1c1z",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Create an item in a board's group in Monday.com, for Name use Task description.",
+        "resource": "boardItem",
+        "boardId": "2137415769",
+        "groupId": "topics",
+        "name": "={{ $fromAI(\"Name\") }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.mondayComTool",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        448
+      ],
+      "id": "c905837b-624a-400d-84f3-beea02ca7ec7",
+      "name": "Create an item in a board's group in Monday.com1",
+      "credentials": {
+        "mondayComApi": {
+          "id": "Gvv16mDLf05X1c1z",
+          "name": "Monday.com account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "description": "use this tool for changing moday.com item Status",
+        "workflowId": {
+          "__rl": true,
+          "value": "S9qHh7k5hz7T7iN5",
+          "mode": "list",
+          "cachedResultName": "Monday.com column change Status"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Item ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item_ID', `use item id here`, 'string') }}",
+            "Value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', `e.g. {\"label\":\"Done\"}\n`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "Value",
+              "displayName": "Value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1568,
+        448
+      ],
+      "id": "1e8e0ce8-4600-4db4-b870-f4f238efe32f",
+      "name": "Change a column value for a board item in Monday.com1"
+    },
+    {
+      "parameters": {
+        "description": "use this tool for changing moday.com item Person",
+        "workflowId": {
+          "__rl": true,
+          "value": "5wHufOIGsv1ffVc1",
+          "mode": "list",
+          "cachedResultName": "Monday.com column change Person"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Item ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item_ID', `use item id here`, 'string') }}",
+            "Value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', `e.g. {\"personsAndTeams\":[{ \"id\": \"82576859\", \"kind\":\"person\" }]}\n\nhere change the id the actual person ID.`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "Value",
+              "displayName": "Value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1744,
+        448
+      ],
+      "id": "0ef20811-bd96-44b7-b068-d0a440f0faac",
+      "name": "Monday.com column change Person1"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbli3OfEYDWEuLboT",
+          "mode": "list",
+          "cachedResultName": "Name_IDS",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tbli3OfEYDWEuLboT"
+        },
+        "filterByFormula": "=",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        2096,
+        448
+      ],
+      "id": "6fb376b9-d2ff-4522-a5f1-0a202e6d5acc",
+      "name": "Search records in Airtable1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "use this tool for changing moday.com item Date",
+        "workflowId": {
+          "__rl": true,
+          "value": "VNmWwyf64LV2ce7E",
+          "mode": "list",
+          "cachedResultName": "Monday.com column change Date"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Item ID": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item_ID', `use item id here`, 'string') }}",
+            "Value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Value', `e.g. {\"date\":\"2025-09-11\"}`, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Item ID",
+              "displayName": "Item ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            },
+            {
+              "id": "Value",
+              "displayName": "Value",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        1920,
+        448
+      ],
+      "id": "16b92d3f-b481-4e73-b9a6-0b00472be927",
+      "name": "Monday.com column change Date1"
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "operation": "addUpdate",
+        "itemId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item_ID', `use item id here`, 'string') }}",
+        "value": "={{ $fromAI('Update_Text', `The Update Text should be Plan text`, 'string') }}"
+      },
+      "type": "n8n-nodes-base.mondayComTool",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        448
+      ],
+      "id": "739e7c98-f785-4325-9904-2febb66a6298",
+      "name": "Update Status (Others)",
+      "credentials": {
+        "mondayComApi": {
+          "id": "Gvv16mDLf05X1c1z",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "operation": "addUpdate",
+        "itemId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Item_ID', `use item id here`, 'string') }}",
+        "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Update_Text', `The Update Text should be Plan text`, 'string') }}"
+      },
+      "type": "n8n-nodes-base.mondayComTool",
+      "typeVersion": 1,
+      "position": [
+        1392,
+        -96
+      ],
+      "id": "b01248bb-e2a9-40b2-b733-706880038955",
+      "name": "Update Status (Me)",
+      "credentials": {
+        "mondayComApi": {
+          "id": "Gvv16mDLf05X1c1z",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=User query:\ntask description: {{ $json.task_description }}\n\nupdate text: \"{{ $json.update_text }}\"\n\nstatus: \"{{ $json.status }}\"\n\nperson Name: \"{{ $json.person_name }}\"",
+        "options": {
+          "systemMessage": "=The user input will be \"task description\", \"update text\", \"status\", \"Person Name\" to add.\n\nyour tasks are the following:\n1. first load all the items by using this tool \"Get many items in Monday.com1\", this will contain many fields and its id use the specific id to add update.\n\n2. else Use this \"Update Status (Others)\" tool to add an update to monday.com group item. if empty DO NOTHING.\n\n3. use this \"Change a column value for a board item in Monday.com1\" tool to add or update status. use the status from the list accordingly. if empty DO NOTHING.\n - Working on it\n - Done\n - Stuck\n\n4. use this \"Monday.com column change Person1\" tool to assign person to the task. before assigning Person to task you will need its id so use this \"Search records in Airtable1\" tool to first search for his id and then use that id to add Person. if the required person does not exists don't use the tool. also take care of neck names you may get neck names from user input try to use the whole names from airtable.\n\n5. use this \"Monday.com column change Date1\" tool to assign the given date: {{ $now.plus(5, 'days').format('yyyy-MM-dd') }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        976,
+        192
+      ],
+      "id": "3caa8397-fcaa-4c6c-9144-64f3e5ff60e1",
+      "name": "To Do Agent (Others)"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-pro",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        912,
+        -96
+      ],
+      "id": "5e66d2f4-e21c-4a07-a617-c159e5837eba",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "npKSRVeGjp36H8Xf",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Pre-processing Tasks",
+        "height": 272,
+        "width": 848
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        -32
+      ],
+      "id": "582fd530-0033-443f-b041-b1848592aea3",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Agent Handle My Tasks",
+        "height": 496,
+        "width": 1392
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        832,
+        -416
+      ],
+      "id": "ae3ef010-6c86-42fc-9f93-40c500a9b430",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Agent to Handle Others Tasks",
+        "height": 544,
+        "width": 1392
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        832,
+        96
+      ],
+      "id": "6677b728-1ca2-4515-8d04-035e3ed5903e",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Sub-Agent",
+        "height": 1088,
+        "width": 2304,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        -432
+      ],
+      "id": "04b1c951-150c-4f79-a146-820cd198d6ee",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMRXZqjyPIfSqz1",
+          "mode": "list",
+          "cachedResultName": "To Dos",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbli3OfEYDWEuLboT",
+          "mode": "list",
+          "cachedResultName": "Name_IDS",
+          "cachedResultUrl": "https://airtable.com/appMRXZqjyPIfSqz1/tbli3OfEYDWEuLboT"
+        },
+        "filterByFormula": "=",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.1,
+      "position": [
+        2080,
+        -96
+      ],
+      "id": "42c8c8c6-2e04-417a-bdc5-9036e068891d",
+      "name": "Search records in Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "lBolt3Br5dk1NUiI",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get many items in Monday.com": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Me)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an item in a board's group in Monday.com": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Me)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Change a column value for a board item in Monday.com": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Me)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Monday.com column change Person": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Me)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Monday.com column change Date": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Me)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "To Do Agent (Others)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many items in Monday.com1": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Others)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an item in a board's group in Monday.com1": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Others)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Change a column value for a board item in Monday.com1": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Others)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Monday.com column change Person1": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Others)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Airtable1": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Others)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Monday.com column change Date1": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Others)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "To Do Agent (Me)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "To Do Agent (Others)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Status (Others)": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Others)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Status (Me)": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Me)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "To Do Agent (Me)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Airtable": {
+      "ai_tool": [
+        [
+          {
+            "node": "To Do Agent (Me)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "82a91605-69de-4cc3-8710-8bcc66fcf5b1",
+  "meta": {
+    "instanceId": "d8261ad00fdf12d22c26fe1d7052f1dc7e37753f7ae4a5f6f52933422938b8f5"
+  },
+  "id": "nJgccWswOaFg19ud",
+  "tags": []
+}
